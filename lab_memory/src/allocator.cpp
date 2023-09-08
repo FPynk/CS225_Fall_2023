@@ -15,7 +15,7 @@ Allocator::Allocator(const std::string& studentFile, const std::string& roomFile
 {
     createLetterGroups();
     loadStudents(studentFile);
-    loadRooms(roomFile);
+    loadRooms(roomFile);        // Error with line 47 2 times, 53 once
 }
 
 void Allocator::createLetterGroups()
@@ -44,14 +44,15 @@ void Allocator::loadRooms(const std::string& file)
 {
     // Read in rooms
     fileio::loadRooms(file);
-    rooms = new Room[roomCount];
+    roomCount = fileio::getNumRooms();
+    rooms = new Room[roomCount];    
 
     totalCapacity = 0;
     int i = 0;
     while (fileio::areMoreRooms()) {
+        rooms[i] = fileio::nextRoom();      //ERROR with line 18
+        totalCapacity += rooms[i].capacity; // Error
         i++; 
-        rooms[i] = fileio::nextRoom();
-        totalCapacity += rooms[i].capacity;
     }
 }
 
