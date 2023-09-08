@@ -37,7 +37,7 @@ Room& Room::operator=(const Room& other)
 
 Room::~Room()
 {
-    clear();
+    clear();    // ERROR with line 66
 }
 
 void Room::addLetter(const Letter& L)
@@ -63,7 +63,7 @@ void Room::clear()
 {
     if (letters != NULL)
 
-        delete letters;
+        delete[] letters; // ERROR wtih line 40
 }
 
 void Room::copy(const Room& other)
