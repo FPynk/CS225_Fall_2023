@@ -28,21 +28,25 @@ Room::Room(const Room& other)
 
 Room& Room::operator=(const Room& other)
 {
+    //std::cout << "Room = called" << std::endl;
     if (this != &other) {
         clear();
         copy(other);
     }
+    //std::cout << "Room = returning" << std::endl;
     return *this;
 }
 
 Room::~Room()
 {
-    clear();    // ERROR with line 66
+    //std::cout << "Destructor called" << std::endl;
+    clear();    
 }
 
 void Room::addLetter(const Letter& L)
 {
-    letters[letterCount++] = L;
+    //std::cout << "Letter: " << L.letter << " to room " << name << std::endl;
+    letters[letterCount++] = L; // Error
     count += L.count;
 }
 
@@ -61,9 +65,10 @@ void Room::print(std::ostream & stream /* = std::cout */)
 
 void Room::clear()
 {
-    if (letters != NULL)
-
-        delete[] letters; // ERROR wtih line 40
+    //std::cout << "Room::Clear() called on " << name << std::endl;
+    if (letters != NULL) {
+        delete[] letters; 
+    }
 }
 
 void Room::copy(const Room& other)
@@ -72,6 +77,14 @@ void Room::copy(const Room& other)
     capacity = other.capacity;
     count = other.count;
     letterCount = other.letterCount;
-    letters = other.letters;
+    // Deep copy of letters
+    if (other.letters != nullptr) {
+        letters = new Letter[max_letters];
+        for (int i = 0; i < letterCount; i++) {
+            letters[i] = other.letters[i];
+        }
+    } else {
+        letters = nullptr;
+    }
 
 }

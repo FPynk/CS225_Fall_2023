@@ -49,11 +49,13 @@ void Allocator::loadRooms(const std::string& file)
 
     totalCapacity = 0;
     int i = 0;
+    //std::cout << "While loop start" << std::endl;
     while (fileio::areMoreRooms()) {
         rooms[i] = fileio::nextRoom();      //ERROR with line 18
         totalCapacity += rooms[i].capacity; // Error
         i++; 
     }
+    //std::cout << "While loop end" << std::endl;
 }
 
 
@@ -91,6 +93,7 @@ int Allocator::solve()
     std::stable_sort(alpha, alpha + 26);
 
     for (int L = 0; L < 26; L++) {
+        //std::cout << "Switching room to largest opening" << std::endl;
         Room* r = largestOpening();
         r->addLetter(alpha[L]);
     }
@@ -110,7 +113,7 @@ int Allocator::minSpaceRemaining()
 Room* Allocator::largestOpening()
 {
     int index = 0;
-    int max_remaining = 0;
+    int max_remaining = rooms[0].spaceRemaining();
     for (int i = 0; i < roomCount; i++) {
         if (rooms[i].spaceRemaining() > max_remaining) {
             index = i;
@@ -118,4 +121,9 @@ Room* Allocator::largestOpening()
         }
     }
     return &rooms[index];
+}
+
+Allocator::~Allocator() {
+    delete[] rooms;
+    delete[] alpha;
 }

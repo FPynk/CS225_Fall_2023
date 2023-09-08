@@ -46,6 +46,8 @@ class Allocator
      */
     void printRooms(std::ostream & stream = std::cout);
 
+    ~Allocator();
+
   private:
     /**
      * Creates the array of letters.
@@ -72,7 +74,7 @@ class Allocator
     int solve();
 
     /**
-     * Return the room with the largest number of open seasts
+     * Return the room with the largest number of open seats
      */
     Room* largestOpening();
 
