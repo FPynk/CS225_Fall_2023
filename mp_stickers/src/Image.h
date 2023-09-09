@@ -13,7 +13,7 @@ class Image : public cs225::PNG {
     Image(unsigned int width, unsigned int height);
     void lighten();
     void lighten(double amount);
-    void darker();
+    void darken();
     void darken(double amount);
     void saturate();
     void saturate(double amount);
