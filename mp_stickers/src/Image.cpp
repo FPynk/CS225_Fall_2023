@@ -52,6 +52,8 @@ void Image::darker() {
         for (unsigned int col = 0; col < width; col++) {
             if (PNG::getPixel(col, row).l - 0.1 >= 0.0) {
                 PNG::getPixel(col, row).l -= 0.1;
+            } else {
+                PNG::getPixel(col, row).l = 0;
             }
         }
     }
@@ -66,10 +68,13 @@ void Image::darken(double amount) {
         for (unsigned int col = 0; col < width; col++) {
             if (PNG::getPixel(col, row).l - amount >= 0.0) {
                 PNG::getPixel(col, row).l -= amount;
+            }  else {
+                PNG::getPixel(col, row).l = 0;
             }
         }
     }
 }
+
 void Image::saturate() {
 
 }
