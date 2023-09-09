@@ -179,7 +179,16 @@ void Image::illinify() {
 // This function both resizes the Image and scales the contents.
 
 void Image::scale(double factor) {
-     
+    unsigned int new_width = PNG::width() * factor;
+    unsigned int new_height = PNG::height() * factor;
+
+    // Make new copy of current image
+    PNG curImage = *this;
+    // Resize image
+    PNG::resize(new_width, new_height);
+    // Cycle thru pixels of new image
+    // Divide by factor to and use integer truncation to get original pixel to fill in the new coords
+    // Grab original pixel and do replacement
 }
 
 // Scales the image to fit within the size (w x h).
@@ -188,5 +197,6 @@ void Image::scale(double factor) {
 // This function both resizes the Image and scales the contents.
 
 void Image::scale(unsigned w, unsigned h) {
-
+    // Check if new width and height more than or less than current size
+    // scale such that both are below the new widths / heights
 }
