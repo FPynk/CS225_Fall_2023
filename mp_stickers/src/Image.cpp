@@ -16,7 +16,7 @@ void Image::lighten() {
     for (unsigned int row = 0; row < height; row++) {
         for (unsigned int col = 0; col < width; col++) {
             // Increase pixel luminance by 0.1
-            HSLAPixel pix = PNG::getPixel(row, col);
+            HSLAPixel pix = PNG::getPixel(col, row);
             pix.l -= 0.1;
         }
     }
@@ -26,10 +26,12 @@ void Image::lighten(double amount) {
     // Cycle thru each pixel
     unsigned int width = PNG::width();
     unsigned int height = PNG::height();
+    //std::cout << "Width: " << width << " Height: " << height << std::endl;
     for (unsigned int row = 0; row < height; row++) {
         for (unsigned int col = 0; col < width; col++) {
+            //std::cout << "col " << col << std::endl;
             // Increase pixel luminance by 0.1
-            HSLAPixel pix = PNG::getPixel(row, col);
+            HSLAPixel pix = PNG::getPixel(col, row);
             pix.l -= amount;
         }
     }

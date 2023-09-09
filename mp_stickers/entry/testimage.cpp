@@ -4,7 +4,7 @@
 
 int main() {
   Image alma;
-  Image test = Image(100,100);
+  // Image test = Image(100,100);
   std::cout << "Success" << std::endl;
 
   std::cout << "Using Image::lighten to create `lighten.png`..." << std::endl;
