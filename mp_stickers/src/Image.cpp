@@ -154,21 +154,38 @@ void Image::desaturate(double amount) {
     }
 }
 
+// Turns the image grayscale. 
 void Image::grayscale() {
 
 }
 
+// Rotates the color wheel by degrees.
+// Rotating in a positive direction increases the degree of the hue. This function ensures that the hue remains in the range [0, 360].
 void Image::rotateColor(double degrees) {
 
 }
 
+// Illinify the image. 
 void Image::illinify() {
 
 }
 
+// Scale the Image by a given factor.
+
+// For example:
+//     A factor of 1.0 does not change the image.
+//     A factor of 0.5 results in an image with half the width and half the height.
+//     A factor of 2 results in an image with twice the width and twice the height.
+// This function both resizes the Image and scales the contents.
+
 void Image::scale(double factor) {
      
 }
+
+// Scales the image to fit within the size (w x h).
+// This function preserves the aspect ratio of the image, so the result will always be an image of width w or of height h (not necessarily both).
+// For example, if the Image is currently (10, 20) and we want to scale to (100, 100), then this should scale the Image to (50, 100). Note that scaling the image to (100, 200) does not fit within the (100,100) dimensions given and is therefore incorrect.
+// This function both resizes the Image and scales the contents.
 
 void Image::scale(unsigned w, unsigned h) {
 
