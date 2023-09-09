@@ -5,7 +5,9 @@
 
 #pragma once
 
-class Image : public PNG {
+#include "../lib/cs225/PNG.h"
+
+class Image : public cs225::PNG {
   public:
     Image();
     Image(unsigned int width, unsigned int height);
@@ -23,4 +25,4 @@ class Image : public PNG {
     void scale(double factor);
     void scale(unsigned w, unsigned h);
 
-}
+};
