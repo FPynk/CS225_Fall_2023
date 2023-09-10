@@ -14,7 +14,28 @@ int main() {
 
     Image sticker;
     sticker.readFromFile("../data/i.png");
+    std::cout << "layers " << test.layers() << std::endl;
     test.addSticker(sticker, 0, 0);
+    std::cout << "layers " << test.layers() << std::endl;
+    test.addSticker(sticker, 0, 0);
+    std::cout << "layers " << test.layers() << std::endl;
+    test.addSticker(sticker, 0, 0);
+    std::cout << "layers " << test.layers() << std::endl;
+    test.addSticker(sticker, 0, 0);
+    std::cout << "layers " << test.layers() << std::endl;
+    test.addSticker(sticker, 0, 0);
+    std::cout << "layers " << test.layers() << std::endl;
+    test.addSticker(sticker, 0, 0);
+    std::cout << "layers " << test.layers() << std::endl;
+    test.changeMaxStickers(7);
+    std::cout << "layers " << test.layers() << std::endl;
+    test.addSticker(sticker, 0, 0);
+    std::cout << "layers " << test.layers() << std::endl;
+    test.changeMaxStickers(3);
+    test.removeSticker(3);
+    test.removeSticker(2);
+    test.removeSticker(0);
+    test.removeSticker(-1);
 
   return 0;
 }
