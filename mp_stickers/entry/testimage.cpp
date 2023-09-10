@@ -32,10 +32,15 @@ int main() {
   alma.grayscale();
   alma.writeToFile("grayscale.png");
 
-    std::cout << "Using Image::rotateColor to create `rotate.png`..." << std::endl;
+  std::cout << "Using Image::rotateColor to create `rotate.png`..." << std::endl;
   alma.readFromFile("../data/alma.png");
   alma.rotateColor(100);
   alma.writeToFile("rotateColor.png");
+
+  std::cout << "Using Image::illinify to create `illinify.png`..." << std::endl;
+  alma.readFromFile("../data/alma.png");
+  alma.illinify();
+  alma.writeToFile("illinify.png");
 
   return 0;
 }

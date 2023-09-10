@@ -187,10 +187,20 @@ void Image::rotateColor(double degrees) {
 void Image::illinify() {
     unsigned int width = PNG::width();
     unsigned int height = PNG::height();
+    double orange = 11;
+    double blue = 216;
     for (unsigned int row = 0; row < height; row++) {
         for (unsigned int col = 0; col < width; col++) {
-            PNG::getPixel(col, row).h += degrees;
-            // for overflow
+            double hue = PNG::getPixel(col, row).h;
+            // Check distance difference
+            double orange_dist = std::min(std::abs(orange - hue), std::abs(hue - orange));
+            double blue_dist = std::min(std::abs(blue - hue), std::abs(hue - blue));
+
+            if (orange_dist < blue_dist) {
+                PNG::getPixel(col, row).h = 11;
+            } else {
+                PNG::getPixel(col, row).h = 216;
+            }
         }
     }
 }
