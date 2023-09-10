@@ -75,7 +75,12 @@ int StickerSheet::addSticker(Image& sticker, int x, int y) {
 }
 
 int StickerSheet::setStickerAtLayer(Image &sticker, unsigned layer, int x, int y) {
-    return 0;
+    if (layer >= max_) { return -1; }
+    delete stickers_[layer];
+    stickers_[layer] = new Image(sticker);
+    xCords_[layer] = x;
+    yCords_[layer] = y;
+    return layer;
 }
 
 bool StickerSheet::translate(unsigned index, int x, int y) {
