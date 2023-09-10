@@ -10,7 +10,6 @@ StickerSheet::StickerSheet(const Image &picture, unsigned max) {
 }
 
 StickerSheet::StickerSheet(const StickerSheet &other) {
-    StickerSheet::clear();
     StickerSheet::_copy(other);
 }
 
@@ -27,7 +26,6 @@ const StickerSheet& StickerSheet::operator=(const StickerSheet &other) {
 void StickerSheet::changeMaxStickers(unsigned max) {
     if (max < 0) {
         for (unsigned int i = 0; i < max_; i++) {
-            delete stickers_[i];
             stickers_[i] = nullptr;
         }
         stickers_.resize(0);
@@ -37,7 +35,6 @@ void StickerSheet::changeMaxStickers(unsigned max) {
     } else if (max < max_) {
         // Delete excess stickers
         for (unsigned int i = max; i < max_; i++) {
-            delete stickers_[i];
             stickers_[i] = nullptr;
         }
         max_ = max;
@@ -65,7 +62,7 @@ int StickerSheet::addSticker(Image& sticker, int x, int y) {
     // Cycle through stickers_, add at lowest possible empty spot
     for (unsigned int i = 0; i < max_; i++) {
         if (stickers_[i] == nullptr) {
-            stickers_[i] = new Image(sticker);
+            stickers_[i] = &sticker;
             xCords_[i] = x;
             yCords_[i] = y;
             max_reached = false;
@@ -79,7 +76,7 @@ int StickerSheet::addSticker(Image& sticker, int x, int y) {
         stickers_.resize(max_ + 1);
         xCords_.resize(max_ + 1);
         yCords_.resize(max_ + 1);
-        stickers_[max_] = new Image(sticker);
+        stickers_[max_] = &sticker;
         xCords_[max_] = x;
         yCords_[max_] = y;
         layer = max_;
@@ -90,8 +87,7 @@ int StickerSheet::addSticker(Image& sticker, int x, int y) {
 
 int StickerSheet::setStickerAtLayer(Image &sticker, unsigned layer, int x, int y) {
     if (layer >= max_ || layer < 0) { return -1; }
-    delete stickers_[layer];
-    stickers_[layer] = new Image(sticker);
+    stickers_[layer] = &sticker;
     xCords_[layer] = x;
     yCords_[layer] = y;
     return layer;
@@ -109,7 +105,6 @@ void StickerSheet::removeSticker (unsigned index) {
         std::cout << "invalid index" << std::endl;
         return; 
     }
-    delete stickers_[index];
     stickers_[index] = nullptr;
     xCords_[index] = 0;
     yCords_[index] = 0;
@@ -147,9 +142,9 @@ void StickerSheet::clear() {
     delete base_;
     base_ = nullptr;
     for (unsigned int i = 0; i < max_; i++) {
-        delete stickers_[i];
         stickers_[i] = nullptr;
     }
+    max_ = 0;
     stickers_.clear();
     xCords_.clear();
     yCords_.clear();
@@ -161,7 +156,7 @@ void StickerSheet::_copy(StickerSheet const & other) {
     stickers_.resize(max_, nullptr);
     for (unsigned int i = 0; i < other.max_; i++) {
         if (other.stickers_[i] != nullptr) {
-            stickers_[i] = new Image(*other.stickers_[i]);
+            stickers_[i] = other.stickers_[i];
         } else {
             stickers_[i] = nullptr;
         } 
