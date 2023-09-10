@@ -12,14 +12,14 @@ int main() {
     // StickerSheet test2 = StickerSheet(alma, 5);
     // test2 = test;
 
-    // Image sticker;
-    // sticker.readFromFile("../data/i.png");
-    // std::cout << "layers " << test.layers() << std::endl;
-    // test.addSticker(sticker, 0, 0);
-    // std::cout << "layers " << test.layers() << std::endl;
-    // test.addSticker(sticker, 0, 0);
-    // std::cout << "layers " << test.layers() << std::endl;
-    // test.addSticker(sticker, 0, 0);
+    Image sticker;
+    sticker.readFromFile("../data/i.png");
+    //std::cout << "layers " << test.layers() << std::endl;
+    test.addSticker(sticker, 0, 0);
+    //std::cout << "layers " << test.layers() << std::endl;
+    test.addSticker(sticker, 100, 100);
+    //std::cout << "layers " << test.layers() << std::endl;
+    test.addSticker(sticker, 200, 200);
     // std::cout << "layers " << test.layers() << std::endl;
     // test.addSticker(sticker, 0, 0);
     // std::cout << "layers " << test.layers() << std::endl;
@@ -36,7 +36,7 @@ int main() {
     // test.removeSticker(2);
     // test.removeSticker(0);
     // test.removeSticker(-1);
-    test.render();
+    test.render().writeToFile("myImage.png");;
 
   return 0;
 }
