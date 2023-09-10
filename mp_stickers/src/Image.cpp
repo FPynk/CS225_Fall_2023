@@ -204,5 +204,11 @@ void Image::scale(double factor) {
 
 void Image::scale(unsigned w, unsigned h) {
     // Check if new width and height more than or less than current size
+    double w_factor = static_cast<double>(w) / PNG::width();
+    double h_factor = static_cast<double>(h) / PNG::height();
+
+    double factor = std::min(w_factor, h_factor); 
     // scale such that both are below the new widths / heights
+    Image::scale(factor);
+
 }

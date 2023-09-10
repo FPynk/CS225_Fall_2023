@@ -22,5 +22,10 @@ int main() {
   alma.scale(2);
   alma.writeToFile("scale2x.png");
 
+  // alma.scale(100,100);
+  // alma.writeToFile("scale100pix.png");
+  // alma.scale(1000, 1000);
+  // alma.writeToFile("scale1000pix.png");
+
   return 0;
 }
