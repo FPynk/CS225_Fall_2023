@@ -20,10 +20,13 @@ class StickerSheet {
         Image* getSticker(unsigned index);
         int layers() const;
         Image render() const;
+        ~StickerSheet();
     private:
+        void _copy(PNG const & other);
+        void clear();
         Image* base_;
         std::vector<Image*> stickers_;
         unsigned int max_;
-        std::vector<unsigned int> xCords;
-        std::vector<unsigned int> yCords;
+        std::vector<unsigned int> xCords_;
+        std::vector<unsigned int> yCords_;
 };
