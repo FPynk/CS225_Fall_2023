@@ -6,7 +6,7 @@ StickerSheet::StickerSheet(const Image &picture, unsigned max) {
     stickers_.resize(max, nullptr);
     xCords_.resize(max, 0);
     yCords_.resize(max, 0);
-    std::cout << "StickerSheet with max_ = " << max_ << std::endl;
+    // std::cout << "StickerSheet with max_ = " << max_ << std::endl;
 }
 
 StickerSheet::StickerSheet(const StickerSheet &other) {
@@ -24,15 +24,7 @@ const StickerSheet& StickerSheet::operator=(const StickerSheet &other) {
 // Modifies the maximum number of stickers that can be stored on this StickerSheet without changing existing stickers' indices.
 // If the new maximum number of stickers is smaller than the current number number of stickers, the stickers with indices above max - 1 will be lost.
 void StickerSheet::changeMaxStickers(unsigned max) {
-    if (max < 0) {
-        for (unsigned int i = 0; i < max_; i++) {
-            stickers_[i] = nullptr;
-        }
-        stickers_.resize(0);
-        xCords_.resize(0);
-        yCords_.resize(0);
-        max_ = 0;
-    } else if (max < max_) {
+    if (max < max_) {
         // Delete excess stickers
         for (unsigned int i = max; i < max_; i++) {
             stickers_[i] = nullptr;
@@ -123,6 +115,7 @@ int StickerSheet::layers() const {
 }
 
 Image StickerSheet::render() const {
+    std::cout << "Rendering image" << std::endl;
     // Check if sticker is out of bounds of image, resize output accordingly
     unsigned int height = base_->height();
     unsigned int width = base_->width();
@@ -145,15 +138,19 @@ Image StickerSheet::render() const {
     }
     unsigned int new_width = max_x - min_x;
     unsigned int new_height = max_y - min_y;
+    //std::cout << "Final image is w*h: " << new_width << " x "<< new_height << std::endl;
     Image output = Image(new_width, new_height);
 
+    //std::cout << "Base is width " << width << " height " << height << std::endl;
+    //std::cout << "min_x " << min_x << " min_y " << min_y << std::endl;
     // paste image onto new place
     for (unsigned int x = 0; x < width; x++) {
         for (unsigned int y = 0; y < height; y++) {
+            //std::cout << "x " << x << " y "<< y << std::endl;
             output.getPixel(x - min_x, y - min_y) = base_->getPixel(x, y);
         }
     }
-
+    std::cout << "successfully painted original picture" << std::endl;
     // paint the sticker on 
     for (unsigned int i = 0; i < max_; i++) {
         if (stickers_[i] != nullptr) {

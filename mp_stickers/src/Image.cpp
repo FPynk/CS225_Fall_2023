@@ -1,12 +1,10 @@
 #include "Image.h"
 using namespace cs225;
 
-Image::Image() {
-    PNG();
+//note way of calling PNG constructor
+Image::Image() : PNG() {
 }
-
-Image::Image(unsigned int width, unsigned int height) {
-    PNG(width, height);
+Image::Image(unsigned int width, unsigned int height) : PNG(width, height){
 }
 
 void Image::lighten() {
