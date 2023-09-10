@@ -124,18 +124,18 @@ Image* StickerSheet::getSticker(unsigned index) {
 }
 
 int StickerSheet::layers() const {
-    int count = 0;
-    for (unsigned int i = 0; i < max_; i++) {
-        if (stickers_[i] == nullptr) {
-            count++;
-        }
-    }
-    return count;
+    // int count = 0;
+    // for (unsigned int i = 0; i < max_; i++) {
+    //     if (stickers_[i] != nullptr) {
+    //         count++;
+    //     }
+    // }
+    return max_;
 }
 
 Image StickerSheet::render() const {
     // Check if sticker is out of bounds of image, resize output accordingly
-    // paint sticker onto image
+    // paint the sticker on 
     return *base_;
 }
 
