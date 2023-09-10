@@ -187,8 +187,14 @@ void Image::scale(double factor) {
     // Resize image
     PNG::resize(new_width, new_height);
     // Cycle thru pixels of new image
-    // Divide by factor to and use integer truncation to get original pixel to fill in the new coords
-    // Grab original pixel and do replacement
+    for (unsigned int y = 0; y < new_height; y++) {
+        for (unsigned int x = 0; x < new_width; x++) {
+            // Divide by factor to and use integer truncation to get original pixel to fill in the new coords
+            HSLAPixel& old_pix = curImage.getPixel(x / factor, y/ factor);
+            PNG::getPixel(x,y) = old_pix;
+            // Grab original pixel and do replacement        
+        }
+    }
 }
 
 // Scales the image to fit within the size (w x h).
