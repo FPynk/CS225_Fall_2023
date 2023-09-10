@@ -53,6 +53,7 @@ void sketchify(std::string inputFile, std::string outputFile) {
     // left, color it my favorite color in the output
     for (unsigned y = 1; y < height; y++) {
         for (unsigned x = 1; x < width; x++) {
+            
             // Calculate the pixel difference
             HSLAPixel& prev = original->getPixel(x - 1, y - 1);
             HSLAPixel& curr = original->getPixel(x, y);
