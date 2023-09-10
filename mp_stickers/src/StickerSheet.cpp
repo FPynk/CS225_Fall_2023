@@ -119,17 +119,17 @@ Image StickerSheet::render() const {
     // Check if sticker is out of bounds of image, resize output accordingly
     unsigned int height = base_->height();
     unsigned int width = base_->width();
-    unsigned int max_x = width;
-    unsigned int min_x = 0;
-    unsigned int max_y = height;
-    unsigned int min_y = 0;
+    int max_x = width;
+    int min_x = 0;
+    int max_y = height;
+    int min_y = 0;
     // Finding bounds
     for (unsigned int i = 0; i < max_; i++) {
         if (stickers_[i] != nullptr) {
-            unsigned int sticker_max_x = xCords_[i] + stickers_[i]->width();
-            unsigned int sticker_min_x = xCords_[i];
-            unsigned int sticker_max_y = yCords_[i] + stickers_[i]->height();
-            unsigned int sticker_min_y = yCords_[i];
+            int sticker_max_x = xCords_[i] + stickers_[i]->width();
+            int sticker_min_x = xCords_[i];
+            int sticker_max_y = yCords_[i] + stickers_[i]->height();
+            int sticker_min_y = yCords_[i];
             if (max_x < sticker_max_x) { max_x = sticker_max_x; }
             if (min_x > sticker_min_x) { min_x = sticker_min_x; }
             if (max_y < sticker_max_y) { max_y = sticker_max_y; }
