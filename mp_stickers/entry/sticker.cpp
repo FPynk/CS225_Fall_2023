@@ -12,5 +12,9 @@ int main() {
     StickerSheet test2 = StickerSheet(alma, 5);
     test2 = test;
 
+    Image sticker;
+    sticker.readFromFile("../data/i.png");
+    test.addSticker(sticker, 0, 0);
+
   return 0;
 }
