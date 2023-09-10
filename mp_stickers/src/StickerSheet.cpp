@@ -119,19 +119,59 @@ Image* StickerSheet::getSticker(unsigned index) {
 }
 
 int StickerSheet::layers() const {
-    // int count = 0;
-    // for (unsigned int i = 0; i < max_; i++) {
-    //     if (stickers_[i] != nullptr) {
-    //         count++;
-    //     }
-    // }
     return max_;
 }
 
 Image StickerSheet::render() const {
     // Check if sticker is out of bounds of image, resize output accordingly
+    unsigned int height = base_->height();
+    unsigned int width = base_->width();
+    unsigned int max_x = width;
+    unsigned int min_x = 0;
+    unsigned int max_y = height;
+    unsigned int min_y = 0;
+    // Finding bounds
+    for (unsigned int i = 0; i < max_; i++) {
+        if (stickers_[i] != nullptr) {
+            unsigned int sticker_max_x = xCords_[i] + stickers_[i]->width();
+            unsigned int sticker_min_x = xCords_[i];
+            unsigned int sticker_max_y = yCords_[i] + stickers_[i]->height();
+            unsigned int sticker_min_y = yCords_[i];
+            if (max_x < sticker_max_x) { max_x = sticker_max_x; }
+            if (min_x > sticker_min_x) { min_x = sticker_min_x; }
+            if (max_y < sticker_max_y) { max_y = sticker_max_y; }
+            if (min_y > sticker_min_y) { min_y = sticker_min_y; }
+        }
+    }
+    unsigned int new_width = max_x - min_x;
+    unsigned int new_height = max_y - min_y;
+    Image output = Image(new_width, new_height);
+
+    // paste image onto new place
+    for (unsigned int x = 0; x < width; x++) {
+        for (unsigned int y = 0; y < height; y++) {
+            output.getPixel(x - min_x, y - min_y) = base_->getPixel(x, y);
+        }
+    }
+
     // paint the sticker on 
-    return *base_;
+    for (unsigned int i = 0; i < max_; i++) {
+        if (stickers_[i] != nullptr) {
+            unsigned int x_start = xCords_[i];
+            unsigned int y_start = yCords_[i];
+            unsigned int s_width = stickers_[i]->width();
+            unsigned int s_height = stickers_[i]->height();
+            for (unsigned int x = 0; x < s_width; x++) {
+                for (unsigned int y = 0; y < s_height; y++) {
+                    if (stickers_[i]->getPixel(x, y).a != 0) {
+                        output.getPixel(x - min_x + x_start, y - min_y + y_start) = stickers_[i]->getPixel(x, y);
+                    }
+                }
+            }
+        }
+    }
+
+    return output;
 }
 
 StickerSheet::~StickerSheet() {
