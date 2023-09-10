@@ -27,5 +27,15 @@ int main() {
   // alma.scale(1000, 1000);
   // alma.writeToFile("scale1000pix.png");
 
+  std::cout << "Using Image::grayscale to create `grayscale.png`..." << std::endl;
+  alma.readFromFile("../data/alma.png");
+  alma.grayscale();
+  alma.writeToFile("grayscale.png");
+
+    std::cout << "Using Image::rotateColor to create `rotate.png`..." << std::endl;
+  alma.readFromFile("../data/alma.png");
+  alma.rotateColor(100);
+  alma.writeToFile("rotateColor.png");
+
   return 0;
 }

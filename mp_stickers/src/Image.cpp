@@ -156,22 +156,46 @@ void Image::desaturate(double amount) {
 
 // Turns the image grayscale. 
 void Image::grayscale() {
-
+    unsigned int width = PNG::width();
+    unsigned int height = PNG::height();
+    for (unsigned int row = 0; row < height; row++) {
+        for (unsigned int col = 0; col < width; col++) {
+            PNG::getPixel(col, row).s = 0;
+        }
+    }
 }
 
 // Rotates the color wheel by degrees.
 // Rotating in a positive direction increases the degree of the hue. This function ensures that the hue remains in the range [0, 360].
 void Image::rotateColor(double degrees) {
-
+    unsigned int width = PNG::width();
+    unsigned int height = PNG::height();
+    for (unsigned int row = 0; row < height; row++) {
+        for (unsigned int col = 0; col < width; col++) {
+            PNG::getPixel(col, row).h += degrees;
+            // for overflow
+            if (PNG::getPixel(col, row).h > 360.0) {
+                PNG::getPixel(col, row).h -= 360.0;
+            } else if (PNG::getPixel(col, row).h < 0.0) {
+                PNG::getPixel(col, row).h += 360.0;
+            }
+        }
+    }
 }
 
 // Illinify the image. 
 void Image::illinify() {
-
+    unsigned int width = PNG::width();
+    unsigned int height = PNG::height();
+    for (unsigned int row = 0; row < height; row++) {
+        for (unsigned int col = 0; col < width; col++) {
+            PNG::getPixel(col, row).h += degrees;
+            // for overflow
+        }
+    }
 }
 
 // Scale the Image by a given factor.
-
 // For example:
 //     A factor of 1.0 does not change the image.
 //     A factor of 0.5 results in an image with half the width and half the height.
