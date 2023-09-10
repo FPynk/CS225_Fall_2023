@@ -24,12 +24,22 @@ const StickerSheet& StickerSheet::operator=(const StickerSheet &other) {
 // Modifies the maximum number of stickers that can be stored on this StickerSheet without changing existing stickers' indices.
 // If the new maximum number of stickers is smaller than the current number number of stickers, the stickers with indices above max - 1 will be lost.
 void StickerSheet::changeMaxStickers(unsigned max) {
-    if (max < max_) {
+    if (max < 0) {
+        for (unsigned int i = 0; i < max_; i++) {
+            delete stickers_[i];
+            stickers_[i] = nullptr;
+        }
+        stickers_.resize(0);
+        xCords_.resize(0);
+        yCords_.resize(0);
+        max_ = 0;
+    } else if (max < max_) {
         // Delete excess stickers
         for (unsigned int i = max; i < max_; i++) {
             delete stickers_[i];
             stickers_[i] = nullptr;
         }
+        max_ = max;
         stickers_.resize(max_);
         xCords_.resize(max_);
         yCords_.resize(max_);
@@ -75,7 +85,7 @@ int StickerSheet::addSticker(Image& sticker, int x, int y) {
 }
 
 int StickerSheet::setStickerAtLayer(Image &sticker, unsigned layer, int x, int y) {
-    if (layer >= max_) { return -1; }
+    if (layer >= max_ || layer < 0) { return -1; }
     delete stickers_[layer];
     stickers_[layer] = new Image(sticker);
     xCords_[layer] = x;
@@ -84,7 +94,8 @@ int StickerSheet::setStickerAtLayer(Image &sticker, unsigned layer, int x, int y
 }
 
 bool StickerSheet::translate(unsigned index, int x, int y) {
-    return false;
+    if (index >= max_ || layer < 0) { return false; }
+    return true;
 }
 
 void StickerSheet::removeSticker (unsigned index) {
