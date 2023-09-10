@@ -1,7 +1,11 @@
 #include "StickerSheet.h"
 
 StickerSheet(const Image &picture, unsigned max) {
-  
+    base_ = new Image(picture);
+    max_ = max;
+    stickers_.resize(max, nullptr);
+    xCords.resize(max, 0);
+    yCords.resize(max, 0);
 }
 
 StickerSheet(const StickerSheet &other) {

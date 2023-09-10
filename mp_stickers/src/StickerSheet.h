@@ -22,6 +22,8 @@ class StickerSheet {
         Image render() const;
     private:
         Image* base_;
-        std::vector<Image> stickers_;
-        unsigned int max;
+        std::vector<Image*> stickers_;
+        unsigned int max_;
+        std::vector<unsigned int> xCords;
+        std::vector<unsigned int> yCords;
 };
