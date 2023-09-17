@@ -61,6 +61,11 @@ endif(CCACHE_FOUND)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Add ASan flags
+set(ASAN_FLAGS "-fsanitize=address -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ASAN_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${ASAN_FLAGS}")
+
 # Define project.   
 project(${assignment_name} VERSION ${assignment_version})
 

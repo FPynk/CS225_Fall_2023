@@ -29,9 +29,13 @@ namespace QuackFun {
 template <typename T>
 T sum(stack<T>& s)
 {
-
     // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
+    if (s.empty()) {return T();}
+    T val = s.top();
+    s.pop();
+    T total = val + sum(s);
+    s.push(val);
+    return total; // stub return value (0 for primitive types). Change this!
                 // Note: T() is the default value for objects, and 0 for
                 // primitive types
 }
@@ -55,9 +59,20 @@ T sum(stack<T>& s)
  */
 bool isBalanced(queue<char> input)
 {
-
     // @TODO: Make less optimistic
-    return true;
+    stack<char> tracker;
+    while (!input.empty()) {
+        char front_c = input.front();
+        if (front_c == '[') {
+            tracker.push(front_c);
+        } else if (front_c == ']' && tracker.empty()) {
+            return false;
+        } else if (front_c == ']') {
+            tracker.pop();
+        }
+        input.pop();
+    }
+    return tracker.empty();
 }
 
 /**
@@ -80,7 +95,35 @@ void scramble(queue<T>& q)
 {
     stack<T> s;
     // optional: queue<T> q2;
-
+    queue<T> q2;
+    bool flag_switch = false;
+    unsigned int range = 1;
+    unsigned int counter = 0;
+    while(!q.empty()) {
+        // flag_switch == FALSE; load q2 with range worth of q items using end insertion
+        if (!flag_switch) {
+            q2.push(q.front());
+            q.pop();
+            counter++;
+        } else {
+            // flag_switch == TRUE; load s with range worth of q items using front insertion
+            s.push(q.front());
+            q.pop();
+            counter++;
+        }
+        // Reset counter and increase range, swap flag switch
+        if (counter == range || q.empty()) {
+            // empty stack s to load q2 with reversed elements of q
+            while(!s.empty()) {
+                q2.push(s.top());
+                s.pop();
+            }
+            range++;
+            counter = 0;
+            flag_switch = !flag_switch;
+        }
+    }
     // Your code here
+    q = q2;
 }
 }
