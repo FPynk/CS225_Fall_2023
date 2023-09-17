@@ -79,6 +79,17 @@ void List<T>::insertFront(T const & ndata) {
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in mp_lists part 1
+  ListNode * newNode = new ListNode(ndata);
+    // Case 1: empty list
+    if (head_ == NULL && tail_ == NULL) {
+        head_ = newNode;
+        tail_ = newNode;
+    } else { // Case 2: 1 element list & Case 3: multi ele list
+        newNode->prev = tail_;
+        tail_->next = newNode;
+        tail_ = newNode;
+    }
+    length_++;
 }
 
 /**
