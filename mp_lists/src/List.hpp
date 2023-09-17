@@ -136,7 +136,29 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
  */
 template <typename T>
 void List<T>::waterfall() {
-  /// @todo Graded in part 1
+    /// @todo Graded in part 1
+    // case 1: empty or 1 element
+    if (head_ == tail_) {
+        return;
+    }
+
+    ListNode* cur = head_->next;
+    while (cur != NULL && cur != tail_) {
+        ListNode* move = cur;
+        cur = cur->next->next;
+
+        // linking 2 nodes
+        move->prev->next = move->next;
+        if (move->next != NULL) {
+            move->next->prev = move->prev;
+        }
+
+        // relinking moving node
+        move->prev = tail_;
+        tail_->next = move;
+        move->next = NULL;
+        tail_ = move;
+    }
 }
 
 
