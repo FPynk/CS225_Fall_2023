@@ -60,24 +60,13 @@ void List<T>::insertFront(T const & ndata) {
     ListNode * newNode = new ListNode(ndata);
     // Case 1: empty list
     if (head_ == NULL && tail_ == NULL) {
-        newNode->next = NULL;
-        newNode->prev = NULL;
         head_ = newNode;
         tail_ = newNode;
-        return;
-    }
-    // Case 2: 1 element list
-    if (head_ == tail_ && head_ != NULL) {
+    } else { // Case 2: 1 element list & Case 3: multi ele list
+        newNode->next = head_;
+        head_->prev = newNode;
         head_ = newNode;
-        head_->next = tail_;
-        head_->prev = NULL;
-        tail_->prev = head_;
-        return;
     }
-    // Case 3: multi ele list
-    newNode->next = head_;
-    newNode->prev = NULL;
-    head_ = newNode;
     length_++;
 }
 
