@@ -18,7 +18,7 @@ List<T>::List() {
 template <typename T>
 typename List<T>::ListIterator List<T>::begin() const {
   // @TODO: graded in mp_lists part 1
-  return List<T>::ListIterator(NULL);
+  return List<T>::ListIterator(head_);
 }
 
 /**
