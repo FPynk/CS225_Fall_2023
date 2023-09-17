@@ -8,6 +8,7 @@ List<T>::List() {
   // @TODO: graded in mp_lists part 1
     head_ = NULL;
     tail_ = NULL;
+    length_ = 0;
 }
 
 /**
@@ -37,6 +38,14 @@ typename List<T>::ListIterator List<T>::end() const {
 template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in mp_lists part 1
+    ListNode* tmp = head_;
+    while (head_ != nullptr) {
+        tmp = head_->next;
+        delete head_;
+        head_ = tmp;
+    }
+    head_ = NULL;
+    tail_ = NULL;
 }
 
 /**
@@ -47,21 +56,29 @@ void List<T>::_destroy() {
  */
 template <typename T>
 void List<T>::insertFront(T const & ndata) {
-  /// @todo Graded in mp_lists part 1
-  ListNode * newNode = new ListNode(ndata);
-  newNode -> next = head_;
-  newNode -> prev = NULL;
-  
-  if (head_ != NULL) {
-    head_ -> prev = newNode;
-  }
-  if (tail_ == NULL) {
-    tail_ = newNode;
-  }
-  
-
-  length_++;
-
+    /// @todo Graded in mp_lists part 1
+    ListNode * newNode = new ListNode(ndata);
+    // Case 1: empty list
+    if (head_ == NULL && tail_ == NULL) {
+        newNode->next = NULL;
+        newNode->prev = NULL;
+        head_ = newNode;
+        tail_ = newNode;
+        return;
+    }
+    // Case 2: 1 element list
+    if (head_ == tail_ && head_ != NULL) {
+        head_ = newNode;
+        head_->next = tail_;
+        head_->prev = NULL;
+        tail_->prev = head_;
+        return;
+    }
+    // Case 3: multi ele list
+    newNode->next = head_;
+    newNode->prev = NULL;
+    head_ = newNode;
+    length_++;
 }
 
 /**
