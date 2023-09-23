@@ -117,7 +117,7 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
     curr = curr->next;
   }
 
-  if (curr != NULL) {
+  if (curr != NULL && curr->prev != NULL) {
       curr->prev->next = NULL;
       curr->prev = NULL;
   }
@@ -183,7 +183,31 @@ void List<T>::reverse() {
  */
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
-  /// @todo Graded in mp_lists part 2
+    //// @todo Graded in mp_lists part 2
+    // Edge case, if 0 element or 1 element list;
+    if(startPoint == endPoint) { return; }
+
+    // Maintain pointer to end, new start of list
+    ListNode* tmp_start = endPoint;
+    // Stop when we reach startPoint
+    while(endPoint != startPoint) {
+        // maintain pointer to prev node
+        ListNode* tmp = endPoint->prev;
+
+        // edit next and prev of current node
+        // Case 1: at end of list
+        if (endPoint == tmp_start) {
+            endPoint->next = tmp;
+            endPoint->prev = nullptr;
+        // Case 2: middle of list
+        } else {
+            endPoint->prev = endPoint->next;
+            endPoint->next = tmp;
+        }
+        endPoint = tmp;
+    }
+    // Replace start with old end
+    startPoint = tmp_start;
 }
 
 /**
