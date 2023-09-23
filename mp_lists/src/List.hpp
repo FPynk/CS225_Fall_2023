@@ -195,15 +195,8 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
         ListNode* tmp = endPoint->prev;
 
         // edit next and prev of current node
-        // Case 1: at end of list
-        if (endPoint == tmp_start) {
-            endPoint->next = tmp;
-            endPoint->prev = nullptr;
-        // Case 2: middle of list
-        } else {
-            endPoint->prev = endPoint->next;
-            endPoint->next = tmp;
-        }
+        endPoint->prev = endPoint->next;
+        endPoint->next = tmp;
         endPoint = tmp;
     }
     // Replace start with old end
@@ -218,7 +211,8 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
  */
 template <typename T>
 void List<T>::reverseNth(int n) {
-  /// @todo Graded in mp_lists part 2
+    /// @todo Graded in mp_lists part 2
+
 }
 
 
