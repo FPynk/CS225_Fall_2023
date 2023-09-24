@@ -40,11 +40,11 @@ class ListIterator : public std::iterator<std::bidirectional_iterator_tag, T> {
     // Post-Decrement, iter--
     ListIterator operator--(int) {
         // @TODO: graded in mp_lists part 1
-        ListIterator temp = *this;
+        ListIterator tmp = *this;
         if (position_ != NULL && position_->prev != NULL) {
             position_ = position_->prev;
         }
-        return temp;
+        return tmp;
     }
 
     bool operator!=(const ListIterator& rhs) {
