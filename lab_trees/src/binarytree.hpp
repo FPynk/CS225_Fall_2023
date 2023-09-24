@@ -109,9 +109,8 @@ bool BinaryTree<T>::isOrderedIterative() const
     std::stack<Node*> stack;
     // traversal node
     Node* curr = root;
-    // keep track of last visit, need to find left most value
-    T lastVisited;
-    bool firstNode = true;
+    // changed to literal min val available
+    T lastVisited = std::numeric_limits<T>::min();
 
     while (!stack.empty() || curr != NULL) {
         // not null, go left
@@ -123,17 +122,11 @@ bool BinaryTree<T>::isOrderedIterative() const
             curr = stack.top();
             stack.pop();
             // if firstNode that we are backtracking, its leftmost, start lastVisited
-            if (firstNode) {
-                lastVisited = curr->elem;
-                firstNode = false;
-            // general case, compare curr val with lastvisited val
-            } else {
-                if (curr->elem < lastVisited) {
-                    return false;
-                }
-                // update val
-                lastVisited = curr->elem;
+            if (curr->elem < lastVisited) {
+                return false;
             }
+            // update val
+            lastVisited = curr->elem;
             curr = curr->right;
         }
     }
