@@ -184,7 +184,7 @@ void List<T>::reverse() {
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
     //// @todo Graded in mp_lists part 2
-    std::cout << "calling reverse helper" << std::endl;
+    //std::cout << "calling reverse helper" << std::endl;
     // Edge case, if 0 element or 1 element list, or invalid inputs
     if (startPoint == NULL || endPoint == NULL) { 
         std::cout << "NULL value detected" << std::endl;
