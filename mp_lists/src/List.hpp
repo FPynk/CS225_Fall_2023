@@ -184,23 +184,99 @@ void List<T>::reverse() {
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
     //// @todo Graded in mp_lists part 2
-    // Edge case, if 0 element or 1 element list;
-    if(startPoint == endPoint) { return; }
-
-    // Maintain pointer to end, new start of list
-    ListNode* tmp_start = endPoint;
-    // Stop when we reach startPoint
-    while(endPoint != startPoint) {
-        // maintain pointer to prev node
-        ListNode* tmp = endPoint->prev;
-
-        // edit next and prev of current node
-        endPoint->prev = endPoint->next;
-        endPoint->next = tmp;
-        endPoint = tmp;
+    std::cout << "calling reverse helper" << std::endl;
+    // Edge case, if 0 element or 1 element list, or invalid inputs
+    if (startPoint == NULL || endPoint == NULL) { 
+        std::cout << "NULL value detected" << std::endl;
+        return; 
     }
-    // Replace start with old end
-    startPoint = tmp_start;
+    if (startPoint == endPoint) {
+        std::cout << "1 element list" << std::endl;
+        return; 
+    }
+
+    // Maintain pointer to surround nodes
+    ListNode* beforeStart = startPoint->prev;
+    ListNode* afterEnd = endPoint->next;
+    // std::cout << "beforeStart " << beforeStart << std::endl;
+    // std::cout << "afterEnd " << afterEnd << std::endl;
+    // std::cout << "startPoint " << startPoint << std::endl;
+    // std::cout << "endPoint " << endPoint << std::endl;
+    // if (beforeStart != nullptr) {
+    //         std::cout << "beforeStart: " << beforeStart->data << std::endl;
+    //     } else {
+    //         std::cout << "beforeStart: is nullptr" << std::endl;
+    // }
+    // if (afterEnd != nullptr) {
+    //         std::cout << "afterEnd: " << afterEnd->data << std::endl;
+    //     } else {
+    //         std::cout << "afterEnd: is nullptr" << std::endl;
+    // }
+    // if (startPoint != nullptr) {
+    //         std::cout << "startPoint: " << startPoint->data << std::endl;
+    //     } else {
+    //         std::cout << "startPoint: is nullptr" << std::endl;
+    // }
+    // if (endPoint != nullptr) {
+    //         std::cout << "endPoint: " << endPoint->data << std::endl;
+    //     } else {
+    //         std::cout << "endPoint: is nullptr" << std::endl;
+    // }
+    // Track current node
+    ListNode* curr = endPoint;
+    // Track next node (in old direction)
+    ListNode* next = NULL;
+    ListNode* prev = NULL;
+
+    // Stop when we reach startPoint
+    while(curr != beforeStart && curr != NULL) {
+        //std::cout << "Current node: " << curr->data << std::endl;
+        next = curr->next;
+        prev = curr->prev;
+        curr->next = curr->prev;
+        curr->prev = next;
+        // if (curr->prev != nullptr) {
+        //     std::cout << "curr->prev: " << curr->prev->data << std::endl;
+        // } else {
+        //     std::cout << "curr->prev: is nullptr" << std::endl;
+        // }
+        // if (curr->next != nullptr) {
+        //     std::cout << "curr->next: " << curr->next->data << std::endl;
+        // } else {
+        //     std::cout << "curr->next: is nullptr " << std::endl;
+        // }
+        curr = prev;
+    }
+
+    if (beforeStart != NULL) {beforeStart->next = endPoint;}
+    if (afterEnd != NULL) {afterEnd->prev = startPoint;}
+
+    startPoint->next = afterEnd;
+    endPoint->prev = beforeStart;
+    ListNode* tmp = startPoint;
+    startPoint = endPoint;
+    endPoint = tmp;
+
+    // if (beforeStart != nullptr) {
+    //         std::cout << "beforeStart: " << beforeStart->data << std::endl;
+    //     } else {
+    //         std::cout << "beforeStart: is nullptr" << std::endl;
+    // }
+    // if (afterEnd != nullptr) {
+    //         std::cout << "afterEnd: " << afterEnd->data << std::endl;
+    //     } else {
+    //         std::cout << "afterEnd: is nullptr" << std::endl;
+    // }
+    // if (startPoint != nullptr) {
+    //         std::cout << "startPoint: " << startPoint->data << std::endl;
+    //     } else {
+    //         std::cout << "startPoint: is nullptr" << std::endl;
+    // }
+    // if (endPoint != nullptr) {
+    //         std::cout << "endPoint: " << endPoint->data << std::endl;
+    //     } else {
+    //         std::cout << "endPoint: is nullptr" << std::endl;
+    // }
 }
 
 /**
@@ -212,7 +288,33 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 template <typename T>
 void List<T>::reverseNth(int n) {
     /// @todo Graded in mp_lists part 2
+    //std::cout << "calling reverseNth" << std::endl;
+    if (n <= 0  || head_ == NULL) { return; }
 
+    ListNode* startPoint = head_;
+    ListNode* endPoint = head_;
+    while (startPoint != NULL) {
+        // Iterate until n or length_ reached
+        for(int i = 1; i < n && endPoint->next != NULL; i++) {
+            endPoint = endPoint->next;
+        }
+        //std::cout << "calling reverse on " << startPoint->data << " and " << endPoint->data << std::endl;
+        if (startPoint == head_ && endPoint == tail_) {
+            reverse(head_, tail_);
+            startPoint = head_;
+            endPoint = tail_;
+        } else if (startPoint == head_) {
+            reverse(head_, endPoint);
+            startPoint = head_;
+        } else if (endPoint == tail_) {
+            reverse(startPoint, tail_);
+            endPoint = tail_;
+        } else {
+            reverse(startPoint, endPoint);
+        }
+        startPoint = endPoint->next;
+        endPoint = startPoint;
+    }
 }
 
 

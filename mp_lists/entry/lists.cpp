@@ -31,6 +31,15 @@ int main() {
     }
     std::cout << std::endl;
 
+    std::cout << "Testing reverse" << std::endl;
+    test_int.reverseNth(2);
+
+    std::cout << "List<int> contents: ";
+    for (auto it = test_int.begin(); it != test_int.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+
     std::cout << "Success!" << std::endl;
     return 0;
 }
