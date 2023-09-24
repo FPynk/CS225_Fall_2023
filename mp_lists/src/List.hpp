@@ -421,5 +421,20 @@ typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength
     ListNode* midNode = start;
     ListNode* prev = nullptr;
 
-  return NULL;
+    for (int i  = 0; i < mid; i++) {
+        prev = midNode;
+        midNode = midNode->next;
+    }
+    // disconnect, check for null
+    if (prev) {
+        prev->next = NULL;
+    } 
+    if (midNode) {
+        midNode->prev = NULL;
+    }
+
+    // recursive step
+    ListNode* first = mergesort(start, mid);
+    ListNode* second = mergesort(midNode, chainLength - mid);
+    return merge(first, second);
 }
