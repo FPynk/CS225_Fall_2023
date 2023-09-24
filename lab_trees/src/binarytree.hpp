@@ -123,6 +123,7 @@ bool BinaryTree<T>::isOrderedIterative() const
             stack.pop();
             // if firstNode that we are backtracking, its leftmost, start lastVisited
             if (curr->elem < lastVisited) {
+                std::cout << "Failing at node: " << curr->elem << " lastVisited: " << lastVisited << std::endl;
                 return false;
             }
             // update val
@@ -130,7 +131,7 @@ bool BinaryTree<T>::isOrderedIterative() const
             curr = curr->right;
         }
     }
-    return false;
+    return true;
 }
 
 /**
