@@ -15,61 +15,26 @@ using namespace cs225;
 
 // You may write your own test cases in this file to test your code.
 // Test cases in this file are not graded.
+TEST_CASE("ListIterator::IterateFromEnd", "") {
+    List<int> myList;
+    myList.insertBack(1);
+    myList.insertBack(2);
+    myList.insertBack(3);
+    myList.insertBack(4);
+    myList.insertBack(5);
 
-TEST_CASE("My Test Case", "") {
-    // lol
-    bool student_wrote_test_case = true;
+    auto iter = myList.end();
 
-    REQUIRE( student_wrote_test_case );
-}
-
-TEST_CASE("ListIterator::operator-- from beginning", "") {
-    List<int> list;
-    list.insertBack(1);
-    list.insertBack(2);
-    list.insertBack(3);
-
-    auto iter = list.begin();
-    --iter;  // Should not crash, but behavior is undefined. Usually, it should stay at the beginning.
-    REQUIRE( *iter == 1 );
-}
-
-TEST_CASE("ListIterator::operator-- general case", "") {
-    List<int> list;
-    list.insertBack(1);
-    list.insertBack(2);
-    list.insertBack(3);
-
-    auto iter = list.begin();
-    ++iter;
-    ++iter;
+    // Assuming that your end() returns an iterator pointing to one past the last element
+    // and that your -- operator handles this correctly to point to the last element
     --iter;
-
-    REQUIRE( *iter == 2 );
-}
-
-TEST_CASE("ListIterator::operator--(int) from beginning", "") {
-    List<int> list;
-    list.insertBack(1);
-    list.insertBack(2);
-    list.insertBack(3);
-
-    auto iter = list.begin();
-    iter--;  // Should not crash, but behavior is undefined. Usually, it should stay at the beginning.
-
-    REQUIRE( *iter == 1 );
-}
-
-TEST_CASE("ListIterator::operator--(int) general case", "") {
-    List<int> list;
-    list.insertBack(1);
-    list.insertBack(2);
-    list.insertBack(3);
-
-    auto iter = list.begin();
-    ++iter;
-    ++iter;
-    iter--;
-
-    REQUIRE( *iter == 2 );
+    REQUIRE(*iter == 5);
+    --iter;
+    REQUIRE(*iter == 4);
+    --iter;
+    REQUIRE(*iter == 3);
+    --iter;
+    REQUIRE(*iter == 2);
+    --iter;
+    REQUIRE(*iter == 1);
 }

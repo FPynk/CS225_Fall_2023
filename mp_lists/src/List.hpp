@@ -18,7 +18,7 @@ List<T>::List() {
 template <typename T>
 typename List<T>::ListIterator List<T>::begin() const {
   // @TODO: graded in mp_lists part 1
-  return List<T>::ListIterator(head_);
+  return List<T>::ListIterator(head_, tail_);
 }
 
 /**
@@ -27,9 +27,13 @@ typename List<T>::ListIterator List<T>::begin() const {
 template <typename T>
 typename List<T>::ListIterator List<T>::end() const {
   // @TODO: graded in mp_lists part 1
-  return List<T>::ListIterator(NULL);
+  return List<T>::ListIterator(NULL, tail_);
 }
 
+template <class T>
+typename List<T>::ListNode* List<T>::getTail() {
+    return tail_;
+}
 
 /**
  * Destroys all dynamically allocated memory associated with the current

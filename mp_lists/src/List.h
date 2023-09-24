@@ -60,6 +60,7 @@ class List {
     };
 
   public:
+
     /**
      * Default List constructor.
      * Creates an empty List.
@@ -198,6 +199,9 @@ class List {
      * Returns a ListIterator one past the end of the List.
      */
     ListIterator end() const;
+
+    // solve my -- from end problem
+    ListNode* getTail();
 
     // Iterator constructor
     template <class Iter>
