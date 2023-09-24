@@ -355,8 +355,46 @@ void List<T>::mergeWith(List<T> & otherList) {
  */
 template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
-  /// @todo Graded in mp_lists part 2
-  return NULL;
+    /// @todo Graded in mp_lists part 2
+    // check for NULL values
+    if (first == NULL) { return second; }
+    if (second == NULL) { return first; }
+
+    // pointers for merged list
+    ListNode* head = NULL;
+    ListNode* tail = NULL;
+
+    // set head of the merged list
+    if (first->data < second->data) {
+        head = tail = first;
+        first = first->next;
+    } else {
+        head = tail = second;
+        second = second->next;
+    }
+
+    while (first != NULL && second != NULL) {
+        if (first->data < second->data) {
+            tail->next = first;
+            first->prev = tail;
+            first = first->next;
+        } else {
+            tail->next = second;
+            second->prev = tail;
+            second = second->next;
+        }
+        tail = tail->next;
+    }
+    
+    if (first != NULL) {
+        tail->next = first;
+        first->prev = tail;
+    }
+    if (second != NULL) {
+        tail->next = second;
+        second->prev = tail;
+    }
+    return head;
 }
 
 /**
@@ -372,6 +410,16 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
  */
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
-  /// @todo Graded in mp_lists part 2
+    /// @todo Graded in mp_lists part 2
+    // basecase
+    if (chainLength <= 1) {return start;}
+
+    // middle pt
+    int mid = chainLength / 2;
+
+    // pointers for iterating
+    ListNode* midNode = start;
+    ListNode* prev = nullptr;
+
   return NULL;
 }
