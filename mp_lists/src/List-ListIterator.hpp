@@ -31,6 +31,7 @@ class ListIterator : public std::iterator<std::bidirectional_iterator_tag, T> {
     // Pre-Decrement, --iter
     ListIterator& operator--() {
         // @TODO: graded in mp_lists part 1
+        // now if im at head i do not move, check for prev == null
         if (position_ != NULL && position_->prev != NULL) {
         position_ = position_->prev;
         }

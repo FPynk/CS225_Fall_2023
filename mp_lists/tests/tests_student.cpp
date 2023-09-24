@@ -17,7 +17,59 @@ using namespace cs225;
 // Test cases in this file are not graded.
 
 TEST_CASE("My Test Case", "") {
-    bool student_wrote_test_case = false;
+    // lol
+    bool student_wrote_test_case = true;
 
     REQUIRE( student_wrote_test_case );
+}
+
+TEST_CASE("ListIterator::operator-- from beginning", "") {
+    List<int> list;
+    list.insertBack(1);
+    list.insertBack(2);
+    list.insertBack(3);
+
+    auto iter = list.begin();
+    --iter;  // Should not crash, but behavior is undefined. Usually, it should stay at the beginning.
+    REQUIRE( *iter == 1 );
+}
+
+TEST_CASE("ListIterator::operator-- general case", "") {
+    List<int> list;
+    list.insertBack(1);
+    list.insertBack(2);
+    list.insertBack(3);
+
+    auto iter = list.begin();
+    ++iter;
+    ++iter;
+    --iter;
+
+    REQUIRE( *iter == 2 );
+}
+
+TEST_CASE("ListIterator::operator--(int) from beginning", "") {
+    List<int> list;
+    list.insertBack(1);
+    list.insertBack(2);
+    list.insertBack(3);
+
+    auto iter = list.begin();
+    iter--;  // Should not crash, but behavior is undefined. Usually, it should stay at the beginning.
+
+    REQUIRE( *iter == 1 );
+}
+
+TEST_CASE("ListIterator::operator--(int) general case", "") {
+    List<int> list;
+    list.insertBack(1);
+    list.insertBack(2);
+    list.insertBack(3);
+
+    auto iter = list.begin();
+    ++iter;
+    ++iter;
+    iter--;
+
+    REQUIRE( *iter == 2 );
 }
