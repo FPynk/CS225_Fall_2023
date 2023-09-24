@@ -75,12 +75,25 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
  * Flips the tree over a vertical axis, modifying the tree itself
  *  (not creating a flipped copy).
  */
-    template <typename T>
+template <typename T>
 void BinaryTree<T>::mirror()
 {
     //your code here
+    return mirror(root);
 }
 
+template <typename T>
+void BinaryTree<T>::mirror(Node* subRoot) {
+    // base case
+    if (!subRoot) {
+        return;
+    }
+    // swapping
+    std::swap(subRoot->right, subRoot->left);
+    // recursion
+    mirror(subRoot->right);
+    mirror(subRoot->left);
+}
 
 /**
  * isOrdered() function iterative version
@@ -92,6 +105,38 @@ template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
     // your code here
+    // keep track of who we need to visit
+    std::stack<Node*> stack;
+    // traversal node
+    Node* curr = root;
+    // keep track of last visit, need to find left most value
+    T lastVisited;
+    bool firstNode = true;
+
+    while (!stack.empty() || curr != NULL) {
+        // not null, go left
+        if (curr != NULL) {
+            stack.push(curr);
+            curr = curr->left;
+        // is null, at leaf, backtrack, use stack to go back and go right
+        } else {
+            curr = stack.top();
+            stack.pop();
+            // if firstNode that we are backtracking, its leftmost, start lastVisited
+            if (firstNode) {
+                lastVisited = curr->elem;
+                firstNode = false;
+            // general case, compare curr val with lastvisited val
+            } else {
+                if (curr->elem < lastVisited) {
+                    return false;
+                }
+                // update val
+                lastVisited = curr->elem;
+            }
+            curr = curr->right;
+        }
+    }
     return false;
 }
 
@@ -105,6 +150,21 @@ template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
     // your code here
-    return false;
+    // use of numeric limits for recursive function
+    return isOrderedRecursiveHelper(root, std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
+}
+
+template <typename T>
+bool BinaryTree<T>::isOrderedRecursiveHelper(Node* root, T min, T max) const {
+    // base case leaf
+    if (root == NULL) {
+        return true;
+    }
+    // comparing against right and against left
+    if (root->elem < min || root->elem > max) {
+        return false;
+    }
+    // recursive step
+    return isOrderedRecursiveHelper(root->left, min, root->elem) && isOrderedRecursiveHelper(root->right, root->elem, max);
 }
 
