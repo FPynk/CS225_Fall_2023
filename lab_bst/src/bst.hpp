@@ -95,7 +95,7 @@ void BST<K, V>::remove(Node*& subtree, const K& key)
                 iop = iop->right;
             }
             swap(iop, subtree);
-            remove(subtree, key);
+            remove(subtree->left, key);                             // IOP is local variable, have to pass in subtree->left
         } else {                                                    // 1 Child
             Node* tmp = subtree;
             if (subtree->left != NULL) {                            // left child
