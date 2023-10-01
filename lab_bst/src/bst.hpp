@@ -37,7 +37,7 @@ template <class K, class V>
 void BST<K, V>::insert(const K & key, const V & value)
 {
     // your code here
-    if (find(key, value) == NULL) {
+    if (find(root, key) == NULL) {
         insert(root, key, value);
     }
 }
