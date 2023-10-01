@@ -95,7 +95,7 @@ void BST<K, V>::remove(Node*& subtree, const K& key)
                 iop = iop->right;
             }
             swap(iop, subtree);
-            remove(iop, key);
+            remove(subtree, key);
         } else {                                                    // 1 Child
             Node* tmp = subtree;
             if (subtree->left != NULL) {                            // left child
@@ -105,9 +105,9 @@ void BST<K, V>::remove(Node*& subtree, const K& key)
             }
             delete tmp;
         }
-    } else if (subtree->key > key) {
+    } else if (subtree->key > key) {                                // Curr node greater than key
         remove(subtree->left, key);
-    } else {
+    } else {                                                        // Curr node less than key
         remove(subtree->right, key);
     }
 }
