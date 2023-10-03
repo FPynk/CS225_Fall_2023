@@ -13,11 +13,8 @@ template <int Dim>
 bool smallerDimVal(const Point<Dim>& first,
                                 const Point<Dim>& second, int curDim)
 {
-    /**
-     * @todo Implement this function!
-     */
-
-    return false;
+    // V1
+    return first[curDim] < second[curDim];
 }
 
 template <int Dim>
