@@ -22,11 +22,18 @@ bool shouldReplace(const Point<Dim>& target,
                                 const Point<Dim>& currentBest,
                                 const Point<Dim>& potential)
 {
-    /**
-     * @todo Implement this function!
-     */
-
-     return false;
+    // V1
+    // Calc distance between potential/ currentBest and target
+    // Need dimension data. actually its just 3 since 3D
+    // For loop to do ^2 calc and sum for each. ignore sqrt and use * instead of pow
+    double currSum = 0;
+    double potSum = 0;
+    for (int i = 0; i < 3; ++i) {
+        currSum += (currentBest[i] - target[i]) * (currentBest[i] - target[i]);
+        potSum += (potential[i] - target[i]) * (potential[i] - target[i]);
+    }
+    // Return compare
+    return potSum < currSum;
 }
 
 template <int Dim>
@@ -76,6 +83,7 @@ void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
     /**
      * @todo Implement this function!
      */    
-    
+    // Implement quick select/ quick sort algo
+    // pull from CS128 code
 }
 
