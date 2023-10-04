@@ -14,7 +14,7 @@ bool smallerDimVal(const Point<Dim>& first,
                                 const Point<Dim>& second, int curDim)
 {
     // V1
-    return first[curDim] < second[curDim];
+    return first[curDim] <= second[curDim];
 }
 
 template <int Dim>
@@ -81,7 +81,7 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 // wank ass sorting algo helper function
 // Assuems end is inclusive, not one past
 template <typename RandIter, typename Comparator>
-RandIter partition(RandIter start, RandIter end, Comparator cmp)
+RandIter partitionHelper(RandIter start, RandIter end, Comparator cmp)
 {
     // use start as pivot
     RandIter pivot = start;
@@ -96,12 +96,12 @@ RandIter partition(RandIter start, RandIter end, Comparator cmp)
         }
         // same shit, till j is less than pivot
         while (i <= j && cmp(*pivot, *j)) {
-            ++j;
+            --j;
         }
         // swap values and increment
         std::swap(*i,*j);
         ++i;
-        ++j;
+        --j;
     }
     // Throw pivot to 'centre' which is at j
     std::swap(*pivot, *j);
@@ -116,9 +116,10 @@ void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
     // Implement quick select/ quick sort algo
     // Check for single ele list, invalid start and if start is after end
     if (start >= end) { return; }
-    
+    end = --end;
+    cout << "made it past --end" << endl;
     // partitioning
-    RandIter pivot = partition(start, end - 1, cmp);
+    RandIter pivot = partitionHelper(start, end, cmp);
 
     // Case 1: K correct pos, return
     // Case 2: K wrong pos, on left of pivot, select that range
@@ -126,9 +127,10 @@ void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
     if (k == pivot) {
         return;
     } else if (k < pivot) {
-        return select(start, pivot - 1, k, cmp);
+        pivot = --pivot;
+        return select(start, pivot, k, cmp);
     } else {
-        return select(pivot, end - 1, k, cmp);
+        return select(pivot, end, k, cmp);
     }
 }
 
