@@ -109,7 +109,7 @@ RandIter partitionHelper(RandIter start, RandIter end, Comparator cmp)
     return j;
 }
 
-
+// Seems like it works but imma mark this WIP
 template <typename RandIter, typename Comparator>
 void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
 {
@@ -117,7 +117,7 @@ void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
     // Check for single ele list, invalid start and if start is after end
     if (start >= end) { return; }
     end = --end;
-    cout << "made it past --end" << endl;
+    // cout << "made it past --end" << endl;
     // partitioning
     RandIter pivot = partitionHelper(start, end, cmp);
 
