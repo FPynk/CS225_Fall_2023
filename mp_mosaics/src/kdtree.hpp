@@ -77,13 +77,58 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
     return Point<Dim>();
 }
 
+// Note: cmp compare function true if arg1 is less than arg2
+// wank ass sorting algo helper function
+// Assuems end is inclusive, not one past
+template <typename RandIter, typename Comparator>
+RandIter partition(RandIter start, RandIter end, Comparator cmp)
+{
+    // use start as pivot
+    RandIter pivot = start;
+    RandIter i = start;
+    RandIter j = end;
+
+    // run until i overtakes j
+    while (i <= j) {
+        // move i right till ovetake or find ele greater than pivot
+        while (i <= j && cmp(*i, *pivot)) {
+            ++i;
+        }
+        // same shit, till j is less than pivot
+        while (i <= j && cmp(*pivot, *j)) {
+            ++j;
+        }
+        // swap values and increment
+        std::swap(*i,*j);
+        ++i;
+        ++j;
+    }
+    // Throw pivot to 'centre' which is at j
+    std::swap(*pivot, *j);
+    // return iterator j for use ltr
+    return j;
+}
+
+
 template <typename RandIter, typename Comparator>
 void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
 {
-    /**
-     * @todo Implement this function!
-     */    
     // Implement quick select/ quick sort algo
-    // pull from CS128 code
+    // Check for single ele list, invalid start and if start is after end
+    if (start >= end) { return; }
+    
+    // partitioning
+    RandIter pivot = partition(start, end - 1, cmp);
+
+    // Case 1: K correct pos, return
+    // Case 2: K wrong pos, on left of pivot, select that range
+    // case 3: K wrong pos, right of pivot, select that range
+    if (k == pivot) {
+        return;
+    } else if (k < pivot) {
+        return select(start, pivot - 1, k, cmp);
+    } else {
+        return select(pivot, end - 1, k, cmp);
+    }
 }
 
