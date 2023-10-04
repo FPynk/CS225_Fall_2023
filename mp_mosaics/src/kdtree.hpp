@@ -50,6 +50,7 @@ bool shouldReplace(const Point<Dim>& target,
 template <int Dim>
 typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildHelper(vector<Point<Dim>> &points, int start, int end, int curDim) {
     cout << "FUNCTION: buildHelper executing" << endl;
+    // cout << "start: " << start << " end: " << end << endl;
     // Base case, nothing left to consider/ nullptr case
     if (start > end) {
         return nullptr;
@@ -60,7 +61,7 @@ typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildHelper(vector<Point<Dim>> &p
     };
     // median we are looking for per spec, since end is inclusive no need -1
     int median = (start + end) / 2;
-    select(points.begin(), points.end(), points.begin() + median, cmp);
+    select(points.begin() + start, points.begin() + end + 1, points.begin() + median, cmp);
 
     // New node with median pt
     KDTreeNode* node = new KDTreeNode(points[median]);
@@ -88,7 +89,7 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
     // copy of newPoints
     vector<Point<Dim>> points = newPoints;
     // curDim starts at 0
-    root = buildHelper(points, 0, points.size(), 0);
+    root = buildHelper(points, 0, points.size() - 1, 0);
 }
 
 template <int Dim>
@@ -126,20 +127,21 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 
 // Note: cmp compare function true if arg1 is less than arg2
 // wank ass sorting algo helper function
-// Assuems end is one past
+// Assumes end is one past
 template <typename RandIter, typename Comparator>
-RandIter partitionHelper(RandIter start, RandIter end, Comparator cmp)
+RandIter partitionHelper(RandIter start, RandIter end, RandIter pivot, Comparator cmp)
 {
     cout << "FUNCTION: partitionHelper executing" << endl;
+    // cout << "start: " << *start << " end: " << *(--end) << endl;
     // use start as pivot
-    RandIter pivot = start;
-    RandIter i = start;
-    RandIter j = std::prev(end);
+    std::swap(*start, *pivot);
+    RandIter i = start + 1;
+    RandIter j = end - 1;
 
     // run until i overtakes j
     while (i <= j) {
         // move i right till ovetake or find ele greater than pivot
-        cout << "i: " << *i << " j: " << *j << " pivot: " <<*pivot << endl;
+        // cout << "i: " << *i << " j: " << *j << " pivot: " <<*pivot << endl;
         while (i <= j && cmp(*i, *pivot)) {
             ++i;
             //cout << "i: " << *i << endl;
@@ -174,7 +176,7 @@ void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
     if (start >= end) { return; }
 
     // partitioning
-    RandIter pivot = partitionHelper(start, end, cmp);
+    RandIter pivot = partitionHelper(start, end, start, cmp);
 
     // Case 1: K correct pos, return
     // Case 2: K wrong pos, on left of pivot, select that range
@@ -184,7 +186,7 @@ void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
     } else if (k < pivot) {
         return select(start, pivot, k, cmp);
     } else {
-        return select(std::next(pivot), end, k, cmp);
+        return select(pivot + 1, end, k, cmp);
     }
 }
 
