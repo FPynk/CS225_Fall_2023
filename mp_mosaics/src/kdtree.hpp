@@ -94,27 +94,51 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
     root = buildHelper(points.begin(), points.end(), 0);
 }
 
+// helper function for deep copy constructor and assignment
+template <int Dim>
+typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::copyHelper(KDTreeNode* other) {
+    if (other == nullptr) {
+        return nullptr;
+    }
+
+    KDTreeNode* newNode = new KDTreeNode(other->point);
+    newNode->left = copyHelper(other->left);
+    newNode->right = copyHelper(other->right);
+
+    return newNode;
+}
+
 template <int Dim>
 KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
-  /**
-   * @todo Implement this function!
-   */
+    size = other.size;
+    root = copyHelper(other.root);
 }
 
 template <int Dim>
 const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
-  /**
-   * @todo Implement this function!
-   */
+    // Check if its the same
+    if (this == &rhs) { return *this; }
+    // delete current tree
+    destroy(root);
+    size = rhs.size;
+    root = copyHelper(rhs.root);
+    return *this;
+}
 
-  return *this;
+// helper to destroy tree
+template <int Dim>
+void KDTree<Dim>::destroy(KDTreeNode* node) {
+    if (node == nullptr) { return; }
+    destroy(node->left);
+    destroy(node->right);
+    delete node;
+    node = nullptr;
 }
 
 template <int Dim>
 KDTree<Dim>::~KDTree() {
-  /**
-   * @todo Implement this function!
-   */
+  destroy(root);
+  size = 0;
 }
 
 template <int Dim>

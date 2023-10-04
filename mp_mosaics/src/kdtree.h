@@ -95,6 +95,8 @@ class KDTree
     KDTreeNode* buildHelper(typename vector<Point<Dim>>::iterator start, 
                             typename vector<Point<Dim>>::iterator end, 
                             int curDim);
+    
+    KDTreeNode* copyHelper(KDTreeNode* other);
     /**
      * Copy constructor for KDTree.
      *
@@ -110,6 +112,7 @@ class KDTree
      */
     KDTree const &operator=(const KDTree<Dim>& rhs);
 
+    void destroy(KDTreeNode* node);
     /**
      * Destructor for KDTree.
      */
