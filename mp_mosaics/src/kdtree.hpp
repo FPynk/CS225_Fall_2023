@@ -126,7 +126,7 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 
 // Note: cmp compare function true if arg1 is less than arg2
 // wank ass sorting algo helper function
-// Assuems end is inclusive, not one past
+// Assuems end is one past
 template <typename RandIter, typename Comparator>
 RandIter partitionHelper(RandIter start, RandIter end, Comparator cmp)
 {
@@ -134,7 +134,7 @@ RandIter partitionHelper(RandIter start, RandIter end, Comparator cmp)
     // use start as pivot
     RandIter pivot = start;
     RandIter i = start;
-    RandIter j = end;
+    RandIter j = std::prev(end);
 
     // run until i overtakes j
     while (i <= j) {
@@ -150,15 +150,11 @@ RandIter partitionHelper(RandIter start, RandIter end, Comparator cmp)
             --j;
             //cout << " j: " << *j << endl;
             //cout << "Address j: " << &(*j) << " Address start: " << &(*start) << endl;
-            if (j == start) { break; }
+            //if (j == start) { break; }
         }
         // swap values and increment
-        if (i <= j) {
+        if (i < j) {
             std::swap(*i,*j);
-            ++i;
-            if (j != start) {
-                --j;
-            }
         }
     }
     // Throw pivot to 'centre' which is at j
@@ -176,8 +172,7 @@ void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
     // Check for single ele list, invalid start and if start is after end
     // cout << "start: " << *start << " end - 1: " << *(end - 1) << endl;;
     if (start >= end) { return; }
-    end = --end;
-    // cout << "made it past --end" << endl;
+
     // partitioning
     RandIter pivot = partitionHelper(start, end, cmp);
 
@@ -187,13 +182,9 @@ void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
     if (k == pivot) {
         return;
     } else if (k < pivot) {
-        cout << "k < pivot" << endl;;
-        pivot = --pivot;
         return select(start, pivot, k, cmp);
     } else {
-        cout << "k > pivot" << endl;;
-        pivot = ++pivot;
-        return select(pivot, end, k, cmp);
+        return select(std::next(pivot), end, k, cmp);
     }
 }
 
