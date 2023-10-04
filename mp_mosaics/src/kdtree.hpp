@@ -35,7 +35,7 @@ bool shouldReplace(const Point<Dim>& target,
     // For loop to do ^2 calc and sum for each. ignore sqrt and use * instead of pow
     double currSum = 0;
     double potSum = 0;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < Dim; ++i) {
         currSum += (currentBest[i] - target[i]) * (currentBest[i] - target[i]);
         potSum += (potential[i] - target[i]) * (potential[i] - target[i]);
     }
@@ -48,28 +48,30 @@ bool shouldReplace(const Point<Dim>& target,
 // start and end indexes to know where to look 
 // and the current dimension to consider
 template <int Dim>
-typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildHelper(vector<Point<Dim>> &points, int start, int end, int curDim) {
+typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildHelper(typename vector<Point<Dim>>::iterator start, 
+                                                           typename vector<Point<Dim>>::iterator end, 
+                                                           int curDim) {
     cout << "FUNCTION: buildHelper executing" << endl;
     // cout << "start: " << start << " end: " << end << endl;
     // Base case, nothing left to consider/ nullptr case
-    if (start > end) {
+    if (start >= end) {
         return nullptr;
     }
     // lambda function for select compare input, needs curDim
     auto cmp = [curDim](const Point<Dim>& a, const Point<Dim>& b) {
         return smallerDimVal(a, b, curDim);
     };
-    // median we are looking for per spec, since end is inclusive no need -1
-    int median = (start + end) / 2;
-    select(points.begin() + start, points.begin() + end + 1, points.begin() + median, cmp);
+    // median we are looking for per spec
+    auto median = start + ((end - start - 1) / 2);
+    select(start, end, median, cmp);
 
     // New node with median pt
-    KDTreeNode* node = new KDTreeNode(points[median]);
+    KDTreeNode* node = new KDTreeNode(*median);
 
     // Recurse for left and right subtree
     curDim = (curDim + 1) % Dim;
-    node->left = buildHelper(points, start, median - 1, curDim);
-    node->right = buildHelper(points, median, end, curDim);
+    node->left = buildHelper(start, median, curDim);
+    node->right = buildHelper(median + 1, end, curDim);
 
     // Return node for connecting to parent nodes 
     return node;
@@ -80,16 +82,16 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
 {
     cout << "FUNCTION: KDTree executing" << endl;
     // V1
-    if (newPoints.empty()) {
-        root = nullptr;
-        size = 0;
-        return;
-    }
+    // if (newPoints.empty()) {
+    //     root = nullptr;
+    //     size = 0;
+    //     return;
+    // }
     size = newPoints.size();
     // copy of newPoints
     vector<Point<Dim>> points = newPoints;
     // curDim starts at 0
-    root = buildHelper(points, 0, points.size() - 1, 0);
+    root = buildHelper(points.begin(), points.end(), 0);
 }
 
 template <int Dim>
