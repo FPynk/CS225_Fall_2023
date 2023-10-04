@@ -92,6 +92,7 @@ class KDTree
      */
     KDTree(const vector<Point<Dim>>& newPoints);
 
+    KDTreeNode* buildHelper(vector<Point<Dim>> &points, int start, int end, int curDim);
 
     /**
      * Copy constructor for KDTree.
