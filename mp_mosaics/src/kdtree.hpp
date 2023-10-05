@@ -162,8 +162,10 @@ void KDTree<Dim>::findNearestNeighborHelper(const Point<Dim>& query,
     // Base case of nullptr leaf
     if (node == nullptr) { return; }
     // cout << "Curr node: " << node->point << endl;
+
     // Recursion step
     // figure out traverse left or right subtree
+    // if query's currentDimension value is less than current node dimension, go left, if not go right
     int newDim = (curDim + 1) % Dim;
     if (smallerDimVal(query, node->point, curDim)) {
         findNearestNeighborHelper(query, node->left, newDim, currBest);
@@ -177,12 +179,16 @@ void KDTree<Dim>::findNearestNeighborHelper(const Point<Dim>& query,
     }
 
     // calculations to figure out backtracking
+    // distance between current guess and the query
     double currBestDist = distSquared(query, currBest);
+    // distance between current node and query, tells us if theres a possible improvement
     double dDim = (query[curDim] - node->point[curDim]) * (query[curDim] - node->point[curDim]);
 
     // backtracking. updated to be <= as well
     // as long as there may be an improvement (= or <) in the distance of the current dimension
     // in comparison to the total currBestDist, search the other tree
+    // dDim is like the min dist possible in the other tree, since not considering + 2 other dimensions
+    // so if dDim is less than currBestDist, it may be possible for there to exist a better point
     if (dDim <= currBestDist) {
         if (smallerDimVal(query, node->point, curDim)) {
             findNearestNeighborHelper(query, node->right, newDim, currBest);
