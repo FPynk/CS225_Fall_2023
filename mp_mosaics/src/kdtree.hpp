@@ -39,6 +39,9 @@ bool shouldReplace(const Point<Dim>& target,
         currSum += (currentBest[i] - target[i]) * (currentBest[i] - target[i]);
         potSum += (potential[i] - target[i]) * (potential[i] - target[i]);
     }
+    if (potSum == currSum) {
+        return potential < currentBest;
+    }
     // Return compare
     return potSum < currSum;
 }
@@ -158,7 +161,7 @@ void KDTree<Dim>::findNearestNeighborHelper(const Point<Dim>& query,
                          Point<Dim>& currBest) const {
     // Base case of nullptr leaf
     if (node == nullptr) { return; }
-
+    // cout << "Curr node: " << node->point << endl;
     // Recursion step
     // figure out traverse left or right subtree
     int newDim = (curDim + 1) % Dim;
@@ -168,20 +171,17 @@ void KDTree<Dim>::findNearestNeighborHelper(const Point<Dim>& query,
         findNearestNeighborHelper(query, node->right, newDim, currBest);
     }
 
-    // Calc distances to figure out if need to change currbest
-    double dist = distSquared(query, node->point);
-    double currBestDist = distSquared(query, currBest);
-
-    // update currbest
-    if (dist <  currBestDist || (dist == currBestDist && node->point < currBest)) {
+    // update currbest based on should replace
+    if (shouldReplace(query, currBest, node->point)) {
         currBest = node->point;
-        currBestDist = dist;
     }
 
+    // calculations to figure out backtracking
+    double currBestDist = distSquared(query, currBest);
     double dDim = (query[curDim] - node->point[curDim]) * (query[curDim] - node->point[curDim]);
 
-    // backtracking
-    if (dDim < currBestDist) {
+    // backtracking. updated to be <= as well
+    if (dDim <= currBestDist) {
         if (smallerDimVal(query, node->point, curDim)) {
             findNearestNeighborHelper(query, node->right, newDim, currBest);
         } else {
@@ -194,11 +194,10 @@ template <int Dim>
 Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 {
     // v1
+    if (root == nullptr) { return Point<Dim>();}
     // Point to be updated
-    Point<Dim> currBest;
-    // set to max so we will def find one less
-    double currBestDist = std::numeric_limits<double>::max();
-    
+    Point<Dim> currBest = root->point;
+
     // call helper
     findNearestNeighborHelper(query, root, 0, currBest);
 
