@@ -51,7 +51,7 @@ template <int Dim>
 typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildHelper(typename vector<Point<Dim>>::iterator start, 
                                                            typename vector<Point<Dim>>::iterator end, 
                                                            int curDim) {
-    cout << "FUNCTION: buildHelper executing" << endl;
+    //cout << "FUNCTION: buildHelper executing" << endl;
     // cout << "start: " << start << " end: " << end << endl;
     // Base case, nothing left to consider/ nullptr case
     if (start >= end) {
@@ -80,7 +80,7 @@ typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::buildHelper(typename vector<Point
 template <int Dim>
 KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
 {
-    cout << "FUNCTION: KDTree executing" << endl;
+    //cout << "FUNCTION: KDTree executing" << endl;
     // V1
     // if (newPoints.empty()) {
     //     root = nullptr;
@@ -141,14 +141,68 @@ KDTree<Dim>::~KDTree() {
   size = 0;
 }
 
+// helper to calc distance
+template <int Dim>
+double distSquared(const Point<Dim>& first, const Point<Dim>& second) {
+    double dist = 0;
+    for (int i = 0; i< Dim; ++i) {
+        dist += (first[i] - second[i]) * (first[i] - second[i]);
+    }
+    return dist;
+}
+
+template <int Dim>
+void KDTree<Dim>::findNearestNeighborHelper(const Point<Dim>& query, 
+                         KDTreeNode* node, 
+                         int curDim, 
+                         Point<Dim>& currBest) const {
+    // Base case of nullptr leaf
+    if (node == nullptr) { return; }
+
+    // Recursion step
+    // figure out traverse left or right subtree
+    int newDim = (curDim + 1) % Dim;
+    if (smallerDimVal(query, node->point, curDim)) {
+        findNearestNeighborHelper(query, node->left, newDim, currBest);
+    } else {
+        findNearestNeighborHelper(query, node->right, newDim, currBest);
+    }
+
+    // Calc distances to figure out if need to change currbest
+    double dist = distSquared(query, node->point);
+    double currBestDist = distSquared(query, currBest);
+
+    // update currbest
+    if (dist <  currBestDist || (dist == currBestDist && node->point < currBest)) {
+        currBest = node->point;
+        currBestDist = dist;
+    }
+
+    double dDim = (query[curDim] - node->point[curDim]) * (query[curDim] - node->point[curDim]);
+
+    // backtracking
+    if (dDim < currBestDist) {
+        if (smallerDimVal(query, node->point, curDim)) {
+            findNearestNeighborHelper(query, node->right, newDim, currBest);
+        } else {
+            findNearestNeighborHelper(query, node->left, newDim, currBest);
+        }
+    }
+}
+
 template <int Dim>
 Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 {
-    /**
-     * @todo Implement this function!
-     */
+    // v1
+    // Point to be updated
+    Point<Dim> currBest;
+    // set to max so we will def find one less
+    double currBestDist = std::numeric_limits<double>::max();
+    
+    // call helper
+    findNearestNeighborHelper(query, root, 0, currBest);
 
-    return Point<Dim>();
+    return currBest;
 }
 
 // Note: cmp compare function true if arg1 is less than arg2
@@ -157,7 +211,7 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 template <typename RandIter, typename Comparator>
 RandIter partitionHelper(RandIter start, RandIter end, RandIter pivot, Comparator cmp)
 {
-    cout << "FUNCTION: partitionHelper executing" << endl;
+    //cout << "FUNCTION: partitionHelper executing" << endl;
     // cout << "start: " << *start << " end: " << *(--end) << endl;
     // use start as pivot
     std::swap(*start, *pivot);
@@ -195,7 +249,7 @@ RandIter partitionHelper(RandIter start, RandIter end, RandIter pivot, Comparato
 template <typename RandIter, typename Comparator>
 void select(RandIter start, RandIter end, RandIter k, Comparator cmp)
 {
-    cout << "FUNCTION: select executing" << endl;
+    //cout << "FUNCTION: select executing" << endl;
     // Implement quick select/ quick sort algo
     // Check for single ele list, invalid start and if start is after end
     // cout << "start: " << *start << " end - 1: " << *(end - 1) << endl;;

@@ -177,6 +177,7 @@ class KDTree
      */
     Point<Dim> findNearestNeighbor(const Point<Dim>& query) const;
 
+    void findNearestNeighborHelper(const Point<Dim>& query, KDTreeNode* node, int curDim, Point<Dim>& currBest) const;
     // functions used for grading:
 
     /**
