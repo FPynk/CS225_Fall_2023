@@ -181,6 +181,8 @@ void KDTree<Dim>::findNearestNeighborHelper(const Point<Dim>& query,
     double dDim = (query[curDim] - node->point[curDim]) * (query[curDim] - node->point[curDim]);
 
     // backtracking. updated to be <= as well
+    // as long as there may be an improvement (= or <) in the distance of the current dimension
+    // in comparison to the total currBestDist, search the other tree
     if (dDim <= currBestDist) {
         if (smallerDimVal(query, node->point, curDim)) {
             findNearestNeighborHelper(query, node->right, newDim, currBest);
