@@ -31,7 +31,9 @@ MosaicCanvas* mapTiles(SourceImage const& theSource,
     MosaicCanvas* output = new MosaicCanvas(theSource.getRows(), theSource.getColumns());
     // Convert vector of tileimages to vector of points and make a map
     vector<Point<3>> thePoints;
+    // use pointers to avoid copying tileimage
     map<Point<3>, TileImage*> pointToTileMap;
+    // only need reference to tileimage not a new deep copy for our purposes
     for (TileImage& TI : theTiles) {
         LUVAPixel colour = TI.getAverageColor();
         Point<3> point =  convertToXYZ(colour);
