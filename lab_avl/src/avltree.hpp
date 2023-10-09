@@ -33,9 +33,9 @@ void AVLTree<K, V>::rotateLeft(Node*& t)
     Node* newRoot = t->right;
     t->right = newRoot->left;
     newRoot->left = t;
-    t->height = std::max(heightOrNeg1(t->left), heightOrNeg1(t->right));
+    t->height = 1 + std::max(heightOrNeg1(t->left), heightOrNeg1(t->right));
     t = newRoot;
-    t->height = std::max(heightOrNeg1(t->left), heightOrNeg1(t->right));
+    t->height = 1 + std::max(heightOrNeg1(t->left), heightOrNeg1(t->right));
 }
 
 template <class K, class V>
@@ -55,9 +55,9 @@ void AVLTree<K, V>::rotateRight(Node*& t)
     Node* newRoot = t->left;
     t->left = newRoot->right;
     newRoot->right = t;
-    t->height = std::max(heightOrNeg1(t->left), heightOrNeg1(t->right));
+    t->height = 1 + std::max(heightOrNeg1(t->left), heightOrNeg1(t->right));
     t = newRoot;
-    t->height = std::max(heightOrNeg1(t->left), heightOrNeg1(t->right));
+    t->height = 1 + std::max(heightOrNeg1(t->left), heightOrNeg1(t->right));
 }
 
 template <class K, class V>
@@ -73,6 +73,9 @@ template <class K, class V>
 void AVLTree<K, V>::rebalance(Node*& subtree)
 {
     // your code here
+    if (subtree == NULL) {
+        return;
+    }
     // calc balance
     int balance = heightOrNeg1(subtree->right) - heightOrNeg1(subtree->left);
 
