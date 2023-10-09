@@ -69,7 +69,26 @@ template <class K, class V>
 void AVLTree<K, V>::rebalance(Node*& subtree)
 {
     // your code here
-    
+    // calc balance
+    int balance = heightOrNeg1(subtree->right) - heightOrNeg1(subtree->left);
+
+    // check if node is not in balance
+    if (balance == -2) {
+        int left_balance = heightOrNeg1(subtree->left->right) - heightOrNeg1(subtree->left->left);
+        if (left_balance == -1) {
+            rotateRight(subtree);
+        } else {
+            rotateLeftRight(subtree);
+        }
+    } else if (balance == 2) {
+        int right_balance = heightOrNeg1(subtree->right->right) - heightOrNeg1(subtree->right->left);
+        if (right_balance == 1) {
+            rotateLeft(subtree);
+        } else {
+            rotateRightLeft(subtree);
+        }
+    }
+    subtree->height = 1 + std::max(heightOrNeg1(subtree->right), heightOrNeg1(subtree->left));
 }
 
 template <class K, class V>
