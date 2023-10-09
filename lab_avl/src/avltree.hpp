@@ -101,6 +101,23 @@ template <class K, class V>
 void AVLTree<K, V>::insert(Node*& subtree, const K& key, const V& value)
 {
     // your code here
+    // BST insert again
+    if (subtree == NULL) {
+        subtree = new Node(key, value);
+    } else if (key < subtree->key) {
+        insert(subtree->left, key, value);
+    } else if (key > subtree->key) {
+        insert(subtree->right, key, value);
+    } else {
+        std::cout << "duplicate" << std::endl;
+        subtree->value = value;
+    }
+
+    // height update
+    subtree->height = 1 + std::max(heightOrNeg1(subtree->left), heightOrNeg1(subtree->right));
+
+    // rebalance
+    rebalance(subtree);
 }
 
 template <class K, class V>
