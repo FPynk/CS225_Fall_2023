@@ -30,6 +30,10 @@ void AVLTree<K, V>::rotateLeft(Node*& t)
 {
     functionCalls.push_back("rotateLeft"); // Stores the rotation name (don't remove this)
     // your code here
+    Node* newRoot = t->right;
+    t->right = newRoot->left;
+    newRoot->left = t;
+    t = newRoot;
 }
 
 template <class K, class V>
@@ -46,6 +50,10 @@ void AVLTree<K, V>::rotateRight(Node*& t)
 {
     functionCalls.push_back("rotateRight"); // Stores the rotation name (don't remove this)
     // your code here
+    Node* newRoot = t->left;
+    t->left = newRoot->right;
+    newRoot->right = t;
+    t = newRoot;
 }
 
 template <class K, class V>
@@ -53,12 +61,15 @@ void AVLTree<K, V>::rotateRightLeft(Node*& t)
 {
     functionCalls.push_back("rotateRightLeft"); // Stores the rotation name (don't remove this)
     // your code here
+    rotateRight(t->right);
+    rotateLeft(t);
 }
 
 template <class K, class V>
 void AVLTree<K, V>::rebalance(Node*& subtree)
 {
     // your code here
+    
 }
 
 template <class K, class V>
