@@ -40,7 +40,7 @@ class BTree
         DataPair(K key, V value) : key(key), value(value)
         {
         }
-
+        DataPair() : key(), value() {}
         /**
          * Less than operator for a DataPair. The object is less than another
          * if its key is less than the other's key.
@@ -350,7 +350,7 @@ size_t insertion_idx(const std::vector<T>& elements, const C& val)
         size_t mid = left + (right - left) / 2;
         // if ele at mid is less than val looking for, search in right half, other wise look at left/ mid
         if (elements[mid] < val) {
-            left + mid + 1;
+            left = mid + 1;
         } else {
             right = mid;
         }

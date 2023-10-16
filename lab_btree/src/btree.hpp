@@ -36,7 +36,7 @@ V BTree<K, V>::find(const BTreeNode* subroot, const K& key) const
 
     // Check if key exists in current node
     // Case 1: key at first_larger_idx and matches key we want, return value
-    if (first_larger_idx < subroot->elements.size() && subroot->elemnts[first_larger_idx] == key) {
+    if (first_larger_idx < subroot->elements.size() && subroot->elements[first_larger_idx] == key) {
         return subroot->elements[first_larger_idx].value;
     }
     // if at leaf node and havent found key, can return default value 
@@ -144,9 +144,11 @@ void BTree<K, V>::split_child(BTreeNode* parent, size_t child_idx)
      * at
      * https://www.cs.usfca.edu/~galles/visualization/BTree.html
      */
+    // Indices for median element and child for redistribution purposes
     size_t mid_elem_idx = (child->elements.size() - 1) / 2;
     size_t mid_child_idx = child->children.size() / 2;
 
+    // Iterators for specific positions in child and parent vectors
     /* Iterator for where we want to insert the new child. */
     auto child_itr = parent->children.begin() + child_idx + 1;
     /* Iterator for where we want to insert the new element. */
@@ -158,6 +160,20 @@ void BTree<K, V>::split_child(BTreeNode* parent, size_t child_idx)
 
 
     /* TODO Your code goes here! */
+    // insert median element of child node into parent
+    parent->elements.insert(elem_itr, *mid_elem_itr);
+    // insert newly created right child node into parent's children list
+    parent->children.insert(child_itr, new_right);
+    
+    // Distirbute elements and children of the old child to new left and right
+    // Move ele to right of median ele to new right node
+    new_right->elements.assign(mid_elem_itr+1, child->elements.end());
+    // Move child pointers to right of median child to new right
+    new_right->children.assign(mid_child_itr, child->children.end());
+
+    // Erase elements and child pointers from original left node since moved alrdy
+    new_left->elements.erase(mid_elem_itr, new_left->elements.end());
+    new_left->children.erase(mid_child_itr, new_left->children.end());
 }
 
 /**
@@ -178,8 +194,25 @@ void BTree<K, V>::insert(BTreeNode* subroot, const DataPair& pair)
      * After this call returns we need to check if the child became too large
      * and thus needs to be split to maintain order.
      */
-
+    
     size_t first_larger_idx = insertion_idx(subroot->elements, pair);
 
     /* TODO Your code goes here! */
+    // Case 1: subroot is leaf
+    if (subroot->is_leaf) {
+        // if key doesn'texist, insert, if exists, do nothing
+        if (first_larger_idx == subroot->elements.size() || 
+            subroot->elements[first_larger_idx].key != pair.key) {
+            subroot->elements.insert(subroot->elements.begin() + first_larger_idx, pair);
+        }
+    } 
+    // if not leaf, find appropriate child
+        else {
+        // recursively insert pair into correct child node
+        insert(subroot->children[first_larger_idx], pair);
+        // post-insert, check if child has too many eles, if yes, split
+        if (subroot->children[first_larger_idx]->elements.size() >= order) {
+            split_child(subroot, first_larger_idx);
+        }
+    }
 }
