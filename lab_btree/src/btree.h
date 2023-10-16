@@ -342,8 +342,21 @@ template <class T, class C>
 size_t insertion_idx(const std::vector<T>& elements, const C& val)
 {
     /* TODO Your code goes here! */
-
-    return 5;
+    size_t left = 0;
+    size_t right = elements.size();
+    // While until left reaches right
+    while(left < right) {
+        // calc midpoint
+        size_t mid = left + (right - left) / 2;
+        // if ele at mid is less than val looking for, search in right half, other wise look at left/ mid
+        if (elements[mid] < val) {
+            left + mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    // left points to where val must be inserted
+    return left;
 }
 
 #include "btree_given.hpp"

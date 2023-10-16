@@ -26,8 +26,27 @@ template <class K, class V>
 V BTree<K, V>::find(const BTreeNode* subroot, const K& key) const
 {
     /* TODO Finish this function */
+    // check curr node/subroot is null, means key isnt in tree
+    if(subroot == nullptr) {
+        return V();
+    }
 
+    // find index where key would be if in current subroot
     size_t first_larger_idx = insertion_idx(subroot->elements, key);
+
+    // Check if key exists in current node
+    // Case 1: key at first_larger_idx and matches key we want, return value
+    if (first_larger_idx < subroot->elements.size() && subroot->elemnts[first_larger_idx] == key) {
+        return subroot->elements[first_larger_idx].value;
+    }
+    // if at leaf node and havent found key, can return default value 
+        else if (subroot->children.empty()) {
+            return V();
+    }
+    // if key not found in curr node and is an internal node, recurse search in child
+        else {
+            return find(subroot->children[first_larger_idx], key);
+    }
 
     /* If first_larger_idx is a valid index and the key there is the key we
      * are looking for, we are done. */
@@ -42,8 +61,6 @@ V BTree<K, V>::find(const BTreeNode* subroot, const K& key) const
      * a leaf and we didn't find the key in it, then we have failed to find it
      * anywhere in the tree and return the default V.
      */
-
-    return V();
 }
 
 /**
