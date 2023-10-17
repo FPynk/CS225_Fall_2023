@@ -75,7 +75,7 @@ TEST_CASE("BFS visits the correct pixel first", "[weight=2][part=1]") {
 }
 
 
-TEST_CASE("DFS visits all points within a tolerance", "[weight=1][part=1][valgrind]") {
+TEST_CASE("DFS visits all points within a tolerance", "[weight=1][part=1][valgrind][part=test]") {
   PNG png = getTestPNG();
   Point startPoint(1, 1);
   

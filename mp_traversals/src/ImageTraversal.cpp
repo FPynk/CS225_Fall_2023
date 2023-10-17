@@ -195,18 +195,45 @@ namespace Traversals {
     */
     ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
         /** @todo [Part 1] */
-        // if (work_list_.empty()) {
-        //     std::cout << "Work list empty" << std::endl;
-        //     traversal_ = nullptr;
-        //     end_ = true;
-        //     return *this;
-        // }
+        std::cout << "++ called" << std::endl;
+        if (work_list_.empty()) {
+            std::cout << "Work list empty" << std::endl;
+            traversal_ = nullptr;
+            end_ = true;
+            return *this;
+        }
+
+        // Skip over already visited points
+        while (!work_list_.empty()) {
+            Point next = traversal_->fns_.peek(work_list_);
+            std::pair<int, int> pointPair = std::make_pair(next.x, next.y);
+            if (traversal_->visited_.find(pointPair) != traversal_->visited_.end()) {
+                std::cout << "Visited before" << std::endl;
+                traversal_->fns_.pop(work_list_);
+            } else {
+                break;
+            }
+        }
+
+        if (work_list_.empty()) {
+            std::cout << "Work list empty" << std::endl;
+            traversal_ = nullptr;
+            end_ = true;
+            return *this;
+        }
 
         Point curr = traversal_->fns_.peek(work_list_);
         std::cout << "At: " << curr << std::endl;
         traversal_->fns_.pop(work_list_);
-        // Add curr point to visited
         traversal_->visited_.insert(std::make_pair(curr.x, curr.y));
+
+        
+        // Point curr = traversal_->fns_.peek(work_list_);
+        // std::cout << "At: " << curr << std::endl;
+
+        // traversal_->fns_.pop(work_list_);
+        // // Add curr point to visited
+        // traversal_->visited_.insert(std::make_pair(curr.x, curr.y));
 
         // Get info on our neighbours
         std::vector<Point> neighbours = {
@@ -219,17 +246,39 @@ namespace Traversals {
         for (Point neighbour : neighbours) {
             if (isValid(neighbour)) {
                 std::cout << "Added " << neighbour << " to visit list" << std::endl;
-                traversal_->visited_.insert(std::make_pair(neighbour.x, neighbour.y));
                 //printSet(traversal_->visited_);
                 traversal_->fns_.add(work_list_, neighbour);
             }
         }
+        
+        while (!work_list_.empty()) {
+            Point next = traversal_->fns_.peek(work_list_);
+            std::pair<int, int> pointPair = std::make_pair(next.x, next.y);
+            if (traversal_->visited_.find(pointPair) != traversal_->visited_.end()) {
+                std::cout << "Visited before" << std::endl;
+                traversal_->fns_.pop(work_list_);
+            } else {
+                break;
+            }
+        }
+
         if (work_list_.empty()) {
             std::cout << "Work list empty" << std::endl;
             traversal_ = nullptr;
             end_ = true;
             return *this;
         }
+
+        // Point next = traversal_->fns_.peek(work_list_);
+        // std::pair<int, int> pointPair = std::make_pair(next.x, next.y);
+        // std::cout << "visitcheck: " << std::boolalpha << (traversal_->visited_.find(pointPair) != traversal_->visited_.end()) << std::endl;
+        // while (!work_list_.empty() && traversal_->visited_.find(pointPair) != traversal_->visited_.end()) {
+        //     std::cout << "Visited before "<< std::endl;
+        //     next = traversal_->fns_.peek(work_list_);
+        //     traversal_->fns_.pop(work_list_);
+        //     pointPair = std::make_pair(next.x, next.y);
+        // }
+
         return *this;
     }
 
