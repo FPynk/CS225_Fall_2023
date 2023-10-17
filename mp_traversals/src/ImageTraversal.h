@@ -6,6 +6,7 @@
 #include <iterator>
 #include <deque>
 #include <vector>
+#include <set>
 #include "cs225/HSLAPixel.h"
 #include "cs225/PNG.h"
 #include "Point.h"
@@ -57,6 +58,7 @@ namespace Traversals {
     Point dfs_peek(std::deque<Point> & work_list);
 
     double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);
+    void printSet(std::set<Point> set);
 
     /**
     * A base class for traversal algorithms on images.
@@ -112,5 +114,6 @@ namespace Traversals {
         const Point & start_;
         double tolerance;
         TraversalFunctions fns_;
+        std::set<Point> visited_;
     };
 }

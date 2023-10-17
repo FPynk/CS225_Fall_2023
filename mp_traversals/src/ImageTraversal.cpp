@@ -29,6 +29,14 @@ namespace Traversals {
         return sqrt((h*h) + (s*s) + (l*l));
     }
     
+    void printSet(std::set<Point> set) {
+        std::cout << "Visited_: " << std::endl;
+        for (const auto& elem : set) {
+            std::cout << elem << " ";
+        }
+        std::cout << std::endl;
+    }
+
     /**
     * Adds a Point for the bfs traversal to visit at some point in the future.
     * @param work_list the deque storing a list of points to be processed
@@ -141,18 +149,28 @@ namespace Traversals {
     }
 
     bool ImageTraversal::Iterator::isValid(const Point& point) {
+        std::cout << "isValid Running for " << point << std::endl;
         // out of bounds
         if (point.x >= traversal_->png_.width() || point.y >= traversal_->png_.height()) {
+            std::cout << "isValid: false due to OOB" << std::endl;
             return false;
         }
         // delta checking
         const HSLAPixel & startPix = traversal_->png_.getPixel(traversal_->start_.x, traversal_->start_.y);
-        const HSLAPixel & currPix = traversal_->png_.getPixel(point_.x, point_.y);
-        if (calculateDelta(startPix, currPix)) > traversal_->tolerance {
+        const HSLAPixel & currPix = traversal_->png_.getPixel(point.x, point.y);
+        if (calculateDelta(startPix, currPix) > traversal_->tolerance) {
+            std::cout << "isValid: false due to tolerance" << std::endl;
             return false;
         }
+        // check if point visited
+        if (traversal_->visited_.find(point) != traversal_->visited_.end()) {
+            std::cout << "isValid: false due to visited" << std::endl;
+            return false;
+        }
+        std::cout << "isValid: true" << std::endl;
         return true;
     }
+
     /**
     * Iterator increment operator.
     *
@@ -160,28 +178,41 @@ namespace Traversals {
     */
     ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
         /** @todo [Part 1] */
-        if (work_list_.empty()) {
-            std::cout << "Work list empty" << std::endl;
-            return *this;
-        }
+        // if (work_list_.empty()) {
+        //     std::cout << "Work list empty" << std::endl;
+        //     traversal_ = nullptr;
+        //     end_ = true;
+        //     return *this;
+        // }
 
         Point curr = traversal_->fns_.peek(work_list_);
+        std::cout << "At: " << curr << std::endl;
         traversal_->fns_.pop(work_list_);
+        // Add curr point to visited
+        traversal_->visited_.insert(curr);
 
         // Get info on our neighbours
-        std::vector<Point> = neighbours = {
+        std::vector<Point> neighbours = {
             Point(curr.x + 1, curr.y), // right
             Point(curr.x, curr.y + 1), // below
             Point(curr.x - 1, curr.y),  // left
             Point(curr.x, curr.y - 1) // above
-        }
+        };
         // cycle thru all neighbours, check if in PNG
         for (Point neighbour : neighbours) {
             if (isValid(neighbour)) {
+                std::cout << "Added " << neighbour << " to visit list" << std::endl;
+                traversal_->visited_.insert(neighbour);
+                printSet(traversal_->visited_);
                 traversal_->fns_.add(work_list_, neighbour);
             }
         }
-
+        if (work_list_.empty()) {
+            std::cout << "Work list empty" << std::endl;
+            traversal_ = nullptr;
+            end_ = true;
+            return *this;
+        }
         return *this;
     }
 
