@@ -25,33 +25,33 @@ using namespace cs225;
  * white/- (h=0, s=0, l=1) as possible.
 **/
 
-// TEST_CASE("DFS iterator visits all points in the correct order (8x4 image)", "[weight=1][part=1]") {
-//   PNG png = getTestPNG_8x4();
-//   Point startPoint(2, 2);
+TEST_CASE("DFS iterator visits all points in the correct order (8x4 image)", "[weight=1][part=1][part=1c]") {
+  PNG png = getTestPNG_8x4();
+  Point startPoint(2, 2);
   
-//   Traversals::ImageTraversal t(png, startPoint, 0.2, {
-//     Traversals::dfs_add, Traversals::dfs_pop, Traversals::dfs_peek
-//   });
+  Traversals::ImageTraversal t(png, startPoint, 0.2, {
+    Traversals::dfs_add, Traversals::dfs_pop, Traversals::dfs_peek
+  });
 
-//   Traversals::ImageTraversal::Iterator it = t.begin();
+  Traversals::ImageTraversal::Iterator it = t.begin();
 
-//   REQUIRE( *it == Point(2, 2) ); ++it; 
-//   REQUIRE( *it == Point(2, 1) ); ++it;
+  REQUIRE( *it == Point(2, 2) ); ++it; 
+  REQUIRE( *it == Point(2, 1) ); ++it;
 
-//   REQUIRE( *it == Point(1, 1) ); ++it;
-//   REQUIRE( *it == Point(1, 2) ); ++it;
+  REQUIRE( *it == Point(1, 1) ); ++it;
+  REQUIRE( *it == Point(1, 2) ); ++it;
 
-//   REQUIRE( *it == Point(3, 1) ); ++it;
-//   REQUIRE( *it == Point(3, 2) ); ++it;
+  REQUIRE( *it == Point(3, 1) ); ++it;
+  REQUIRE( *it == Point(3, 2) ); ++it;
 
-//   REQUIRE( *it == Point(4, 2) ); ++it;
-//   REQUIRE( *it == Point(4, 1) ); ++it;
+  REQUIRE( *it == Point(4, 2) ); ++it;
+  REQUIRE( *it == Point(4, 1) ); ++it;
 
-//   REQUIRE( *it == Point(5, 1) ); ++it;
+  REQUIRE( *it == Point(5, 1) ); ++it;
 
-//   REQUIRE( *it == Point(6, 1) ); ++it;
-//   REQUIRE( *it == Point(6, 2) ); ++it;
-// }
+  REQUIRE( *it == Point(6, 1) ); ++it;
+  REQUIRE( *it == Point(6, 2) ); ++it;
+}
 
 // TEST_CASE("BFS iterator visits all points in the correct order (8x4 image)", "[weight=1][part=1]") {
 //   PNG png = getTestPNG_8x4();

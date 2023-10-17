@@ -88,6 +88,7 @@ namespace Traversals {
     */
     Point bfs_peek(std::deque<Point> & work_list) {
         /** @todo [Part 1] */
+        std::cout << "bfs peek" << std::endl;
         return work_list.front();
     }
 
@@ -98,6 +99,7 @@ namespace Traversals {
     */
     Point dfs_peek(std::deque<Point> & work_list) {
         /** @todo [Part 1] */
+        std::cout << "dfs peek" << std::endl;
         return work_list.back();
     }
 
@@ -113,6 +115,11 @@ namespace Traversals {
     ImageTraversal::ImageTraversal(const PNG & png, const Point & start, double tolerance, TraversalFunctions fns) 
     : png_(png), start_(start), tolerance(tolerance), fns_(fns) {
         /** @todo [Part 1] */
+        std::cout << "ImageTraversal constructor called" << std::endl;
+        std::cout << "PNG dimensions: " << png.width() << " x " << png.height() << std::endl;
+        std::cout << "Start Point: (" << start.x << ", " << start.y << ")" << std::endl;
+        std::cout << "Tolerance: " << tolerance << std::endl;
+        std::cout << "Functions: " << (fns.add == dfs_add ? "DFS" : "BFS") << std::endl;
     }
 
     /**
@@ -143,31 +150,41 @@ namespace Traversals {
     // constructor with args, end_ will provide sentinel value for if end
     ImageTraversal::Iterator::Iterator(ImageTraversal* traversal, bool end)
         : traversal_(traversal), end_(end) {
-            if (!end_ && traversal_) {
-                work_list_.push_back(traversal_->start_);
-            }
+        std::cout << "Iterator constructor called with end: " << std::boolalpha << end << std::endl;
+        if (traversal_) {
+            std::cout << "Traversal Start Point: (" << traversal_->start_.x << ", " << traversal_->start_.y << ")" << std::endl;
+            std::cout << "Traversal Tolerance: " << traversal_->tolerance << std::endl;
+            std::cout << "Functions: " << (traversal_->fns_.add == dfs_add ? "DFS" : "BFS") << std::endl;
+        } else {
+            std::cout << "Traversal is nullptr" << std::endl;
+        }
+        if (!end_ && traversal_) {
+            std::cout << "Adding start point to work_list_" << std::endl;
+            work_list_.push_back(traversal_->start_);
+        }
     }
 
     bool ImageTraversal::Iterator::isValid(const Point& point) {
-        std::cout << "isValid Running for " << point << std::endl;
+        //std::cout << "isValid Running for " << point << std::endl;
         // out of bounds
         if (point.x >= traversal_->png_.width() || point.y >= traversal_->png_.height()) {
-            std::cout << "isValid: false due to OOB" << std::endl;
+            //std::cout << "isValid: false due to OOB" << std::endl;
             return false;
         }
         // delta checking
         const HSLAPixel & startPix = traversal_->png_.getPixel(traversal_->start_.x, traversal_->start_.y);
         const HSLAPixel & currPix = traversal_->png_.getPixel(point.x, point.y);
         if (calculateDelta(startPix, currPix) > traversal_->tolerance) {
-            std::cout << "isValid: false due to tolerance" << std::endl;
+            //std::cout << "isValid: false due to tolerance" << std::endl;
             return false;
         }
         // check if point visited
-        if (traversal_->visited_.find(point) != traversal_->visited_.end()) {
-            std::cout << "isValid: false due to visited" << std::endl;
+        std::pair<int, int> pointPair = std::make_pair(point.x, point.y);
+        if (traversal_->visited_.find(pointPair) != traversal_->visited_.end()) {
+            //std::cout << "isValid: false due to visited" << std::endl;
             return false;
         }
-        std::cout << "isValid: true" << std::endl;
+        //std::cout << "isValid: true" << std::endl;
         return true;
     }
 
@@ -189,7 +206,7 @@ namespace Traversals {
         std::cout << "At: " << curr << std::endl;
         traversal_->fns_.pop(work_list_);
         // Add curr point to visited
-        traversal_->visited_.insert(curr);
+        traversal_->visited_.insert(std::make_pair(curr.x, curr.y));
 
         // Get info on our neighbours
         std::vector<Point> neighbours = {
@@ -202,8 +219,8 @@ namespace Traversals {
         for (Point neighbour : neighbours) {
             if (isValid(neighbour)) {
                 std::cout << "Added " << neighbour << " to visit list" << std::endl;
-                traversal_->visited_.insert(neighbour);
-                printSet(traversal_->visited_);
+                traversal_->visited_.insert(std::make_pair(neighbour.x, neighbour.y));
+                //printSet(traversal_->visited_);
                 traversal_->fns_.add(work_list_, neighbour);
             }
         }

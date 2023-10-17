@@ -7,6 +7,7 @@
 #include <deque>
 #include <vector>
 #include <set>
+#include <utility>
 #include "cs225/HSLAPixel.h"
 #include "cs225/PNG.h"
 #include "Point.h"
@@ -114,6 +115,6 @@ namespace Traversals {
         const Point & start_;
         double tolerance;
         TraversalFunctions fns_;
-        std::set<Point> visited_;
+        std::set<std::pair<int, int>> visited_;
     };
 }
