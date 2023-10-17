@@ -91,6 +91,7 @@ namespace Traversals {
             std::deque<Point> work_list_;
             ImageTraversal* traversal_;
             bool end_;
+            std::set<std::pair<int, int>> visited_;
         };
 
         /**
@@ -115,6 +116,5 @@ namespace Traversals {
         const Point & start_;
         double tolerance;
         TraversalFunctions fns_;
-        std::set<std::pair<int, int>> visited_;
     };
 }

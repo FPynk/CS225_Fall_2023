@@ -180,7 +180,7 @@ namespace Traversals {
         }
         // check if point visited
         std::pair<int, int> pointPair = std::make_pair(point.x, point.y);
-        if (traversal_->visited_.find(pointPair) != traversal_->visited_.end()) {
+        if (visited_.find(pointPair) != visited_.end()) {
             //std::cout << "isValid: false due to visited" << std::endl;
             return false;
         }
@@ -207,7 +207,7 @@ namespace Traversals {
         while (!work_list_.empty()) {
             Point next = traversal_->fns_.peek(work_list_);
             std::pair<int, int> pointPair = std::make_pair(next.x, next.y);
-            if (traversal_->visited_.find(pointPair) != traversal_->visited_.end()) {
+            if (visited_.find(pointPair) != visited_.end()) {
                 std::cout << "Visited before" << std::endl;
                 traversal_->fns_.pop(work_list_);
             } else {
@@ -225,7 +225,7 @@ namespace Traversals {
         Point curr = traversal_->fns_.peek(work_list_);
         std::cout << "At: " << curr << std::endl;
         traversal_->fns_.pop(work_list_);
-        traversal_->visited_.insert(std::make_pair(curr.x, curr.y));
+        visited_.insert(std::make_pair(curr.x, curr.y));
 
         
         // Point curr = traversal_->fns_.peek(work_list_);
@@ -250,11 +250,11 @@ namespace Traversals {
                 traversal_->fns_.add(work_list_, neighbour);
             }
         }
-        
+
         while (!work_list_.empty()) {
             Point next = traversal_->fns_.peek(work_list_);
             std::pair<int, int> pointPair = std::make_pair(next.x, next.y);
-            if (traversal_->visited_.find(pointPair) != traversal_->visited_.end()) {
+            if (visited_.find(pointPair) != visited_.end()) {
                 std::cout << "Visited before" << std::endl;
                 traversal_->fns_.pop(work_list_);
             } else {
