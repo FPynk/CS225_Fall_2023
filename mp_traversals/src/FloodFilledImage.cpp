@@ -16,9 +16,7 @@ using namespace cs225;
  * 
  * @param png The starting image of a FloodFilledImage
  */
-FloodFilledImage::FloodFilledImage(const PNG & png) {
-  /** @todo [Part 2] */
-}
+FloodFilledImage::FloodFilledImage(const PNG & png) : png_(png) {}
 
 /**
  * Adds a FloodFill operation to the FloodFillImage.  This function must store the operation,
@@ -28,7 +26,9 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  * @param colorPicker ColorPicker used for this FloodFill operation.
  */
 void FloodFilledImage::addFloodFill(Traversals::ImageTraversal & traversal, ColorPicker & colorPicker) {
-  /** @todo [Part 2] */
+    /** @todo [Part 2] */
+    traversals_.push_back(&traversal);
+    colorPickers_.push_back(&colorPicker);
 }
 
 /**
@@ -50,9 +50,27 @@ void FloodFilledImage::addFloodFill(Traversals::ImageTraversal & traversal, Colo
  *   - ...
  *   - The final frame, after all pixels have been filed)
  * @param frameInterval how often to save frames of the animation
- */ 
+ */
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
-  /** @todo [Part 2] */
-  Animation animation;
-  return animation;
+    /** @todo [Part 2] */
+    Animation animation;
+    PNG png = PNG(png_);
+    animation.addFrame(png);
+    for(unsigned int i = 0; i < traversals_.size(); ++i) {
+        Traversals::ImageTraversal* traversal = traversals_[i];
+        ColorPicker* colorPicker = colorPickers_[i];
+        Traversals::ImageTraversal::Iterator it = traversal->begin();
+        while (it != traversal->end()) {
+            for (unsigned int j = 0; j < frameInterval && it != traversal->end(); ++j) {
+                // iterate for frameinterval times
+                // use get colour from colour picker
+                // update pixel
+                Point point = *it;
+                png.getPixel(point.x, point.y) = colorPicker->getColor(point.x, point.y);
+                ++it;
+            }
+            animation.addFrame(png);
+        }
+    }
+    return animation;
 }

@@ -1,0 +1,5 @@
+if(EXISTS "/workspaces/CS225_Workspace/fa23_cs225_acloh2/lab_heaps/build/test_tests-b12d07c.cmake")
+  include("/workspaces/CS225_Workspace/fa23_cs225_acloh2/lab_heaps/build/test_tests-b12d07c.cmake")
+else()
+  add_test(test_NOT_BUILT-b12d07c test_NOT_BUILT-b12d07c)
+endif()

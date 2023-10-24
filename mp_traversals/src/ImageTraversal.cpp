@@ -88,7 +88,7 @@ namespace Traversals {
     */
     Point bfs_peek(std::deque<Point> & work_list) {
         /** @todo [Part 1] */
-        std::cout << "bfs peek" << std::endl;
+        // std::cout << "bfs peek" << std::endl;
         return work_list.front();
     }
 
@@ -99,7 +99,7 @@ namespace Traversals {
     */
     Point dfs_peek(std::deque<Point> & work_list) {
         /** @todo [Part 1] */
-        std::cout << "dfs peek" << std::endl;
+        // std::cout << "dfs peek" << std::endl;
         return work_list.back();
     }
 
@@ -115,11 +115,11 @@ namespace Traversals {
     ImageTraversal::ImageTraversal(const PNG & png, const Point & start, double tolerance, TraversalFunctions fns) 
     : png_(png), start_(start), tolerance(tolerance), fns_(fns) {
         /** @todo [Part 1] */
-        std::cout << "ImageTraversal constructor called" << std::endl;
-        std::cout << "PNG dimensions: " << png.width() << " x " << png.height() << std::endl;
-        std::cout << "Start Point: (" << start.x << ", " << start.y << ")" << std::endl;
-        std::cout << "Tolerance: " << tolerance << std::endl;
-        std::cout << "Functions: " << (fns.add == dfs_add ? "DFS" : "BFS") << std::endl;
+        // std::cout << "ImageTraversal constructor called" << std::endl;
+        // std::cout << "PNG dimensions: " << png.width() << " x " << png.height() << std::endl;
+        // std::cout << "Start Point: (" << start.x << ", " << start.y << ")" << std::endl;
+        // std::cout << "Tolerance: " << tolerance << std::endl;
+        // std::cout << "Functions: " << (fns.add == dfs_add ? "DFS" : "BFS") << std::endl;
     }
 
     /**
@@ -144,22 +144,22 @@ namespace Traversals {
     ImageTraversal::Iterator::Iterator()
         : traversal_(nullptr), end_(false) {
     /** @todo [Part 1] */
-        std::cout << "Iterator def constructor called " << std::endl;
+        // std::cout << "Iterator def constructor called " << std::endl;
     }
 
     // constructor with args, end_ will provide sentinel value for if end
     ImageTraversal::Iterator::Iterator(ImageTraversal* traversal, bool end)
         : traversal_(traversal), end_(end) {
-        std::cout << "Iterator constructor called with end: " << std::boolalpha << end << std::endl;
+        // std::cout << "Iterator constructor called with end: " << std::boolalpha << end << std::endl;
         if (traversal_) {
-            std::cout << "Traversal Start Point: (" << traversal_->start_.x << ", " << traversal_->start_.y << ")" << std::endl;
-            std::cout << "Traversal Tolerance: " << traversal_->tolerance << std::endl;
-            std::cout << "Functions: " << (traversal_->fns_.add == dfs_add ? "DFS" : "BFS") << std::endl;
+            // std::cout << "Traversal Start Point: (" << traversal_->start_.x << ", " << traversal_->start_.y << ")" << std::endl;
+            // std::cout << "Traversal Tolerance: " << traversal_->tolerance << std::endl;
+            // std::cout << "Functions: " << (traversal_->fns_.add == dfs_add ? "DFS" : "BFS") << std::endl;
         } else {
-            std::cout << "Traversal is nullptr" << std::endl;
+            // std::cout << "Traversal is nullptr" << std::endl;
         }
         if (!end_ && traversal_) {
-            std::cout << "Adding start point to work_list_" << std::endl;
+            // std::cout << "Adding start point to work_list_" << std::endl;
             work_list_.push_back(traversal_->start_);
         }
     }
@@ -195,9 +195,9 @@ namespace Traversals {
     */
     ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
         /** @todo [Part 1] */
-        std::cout << "++ called" << std::endl;
+        // std::cout << "++ called" << std::endl;
         if (work_list_.empty()) {
-            std::cout << "Work list empty" << std::endl;
+            // std::cout << "Work list empty" << std::endl;
             traversal_ = nullptr;
             end_ = true;
             return *this;
@@ -208,7 +208,7 @@ namespace Traversals {
             Point next = traversal_->fns_.peek(work_list_);
             std::pair<int, int> pointPair = std::make_pair(next.x, next.y);
             if (visited_.find(pointPair) != visited_.end()) {
-                std::cout << "Visited before" << std::endl;
+                // std::cout << "Visited before" << std::endl;
                 traversal_->fns_.pop(work_list_);
             } else {
                 break;
@@ -216,14 +216,14 @@ namespace Traversals {
         }
 
         if (work_list_.empty()) {
-            std::cout << "Work list empty" << std::endl;
+            // std::cout << "Work list empty" << std::endl;
             traversal_ = nullptr;
             end_ = true;
             return *this;
         }
 
         Point curr = traversal_->fns_.peek(work_list_);
-        std::cout << "At: " << curr << std::endl;
+        // std::cout << "At: " << curr << std::endl;
         traversal_->fns_.pop(work_list_);
         visited_.insert(std::make_pair(curr.x, curr.y));
 
@@ -245,7 +245,7 @@ namespace Traversals {
         // cycle thru all neighbours, check if in PNG
         for (Point neighbour : neighbours) {
             if (isValid(neighbour)) {
-                std::cout << "Added " << neighbour << " to visit list" << std::endl;
+                // std::cout << "Added " << neighbour << " to visit list" << std::endl;
                 //printSet(traversal_->visited_);
                 traversal_->fns_.add(work_list_, neighbour);
             }
@@ -255,7 +255,7 @@ namespace Traversals {
             Point next = traversal_->fns_.peek(work_list_);
             std::pair<int, int> pointPair = std::make_pair(next.x, next.y);
             if (visited_.find(pointPair) != visited_.end()) {
-                std::cout << "Visited before" << std::endl;
+                // std::cout << "Visited before" << std::endl;
                 traversal_->fns_.pop(work_list_);
             } else {
                 break;
@@ -263,7 +263,7 @@ namespace Traversals {
         }
 
         if (work_list_.empty()) {
-            std::cout << "Work list empty" << std::endl;
+            // std::cout << "Work list empty" << std::endl;
             traversal_ = nullptr;
             end_ = true;
             return *this;
