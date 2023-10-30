@@ -63,4 +63,10 @@ class DisjointSets
      */
     int size(int elem);
 
+    void printSet();
+    
+    private:
+    int findHelper(int elem, std::vector<int> &path);
+
+    std::vector<int> set_collection_;
 };

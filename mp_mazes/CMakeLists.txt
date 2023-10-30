@@ -61,6 +61,10 @@ endif(CCACHE_FOUND)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Add ASAN flags here
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+
 # Define project.   
 project(${assignment_name} VERSION ${assignment_version})
 

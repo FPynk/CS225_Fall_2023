@@ -17,10 +17,15 @@ int main()
 
     s.addelements(50);
     s.setunion(2, 3);
+    s.printSet();
     s.setunion(3, 5);
+    s.printSet();
     s.setunion(5, 7);
+    s.printSet();
     s.setunion(7, 2);
+    s.printSet();
     s.setunion(4, 6);
+    s.printSet();
 
     cout << s.find(7) << endl;
     cout << s.find(5) << endl;
