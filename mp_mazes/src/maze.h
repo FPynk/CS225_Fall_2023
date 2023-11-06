@@ -9,7 +9,15 @@
 #include <vector>
 #include "cs225/PNG.h"
 #include "cs225/HSLAPixel.h"
+#include "dsets.h"
 
+// Cell/ Squares that make up the maze
+// Walls right and down are default true
+struct Cell
+{
+    bool rightWall = true;
+    bool downWall = true;
+};
 
 /**
  * Each SquareMaze object represents a randomly-generated square maze and its
@@ -154,5 +162,16 @@ class SquareMaze
      * @return a PNG of the solved SquareMaze
      */
     cs225::PNG* drawMazeWithSolution();
+
+    private:
+    // 2D vector of cells to store cells of maze
+    // Have to use math to get index = y * width + x
+    // More lightweight than vector of vectors
+    std::vector<Cell> maze_;
+    // need this to keep track of paths to avoid cycles
+    DisjointSets ds_;
+    // Keep track of important values
+    int width_;
+    int height_;
 
 };

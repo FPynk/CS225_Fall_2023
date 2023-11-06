@@ -1,11 +1,11 @@
 #include "maze.h"
 
-SquareMaze::SquareMaze() {
-
+SquareMaze::SquareMaze() : width_(0), height_(0) {
+    // empty constructor
 }
 
-void SquareMaze::makeMaze(int width, int height) {
-
+void SquareMaze::makeMaze(int width, int height) : width_(width), height_(height) {
+    
 }
 
 bool SquareMaze::canTravel(int x, int y, int dir) const {
