@@ -213,9 +213,85 @@ std::vector<int> SquareMaze::solveMaze() {
 }
 
 cs225::PNG* SquareMaze::drawMaze() const {
-    return nullptr;
+    cs225::PNG *mazeImage = new cs225::PNG(width_ * 10 + 1, height_ * 10 + 1);
+
+    // blacken border top and left, except entrace to 9,0
+    for (unsigned int i = 0; i < mazeImage->width(); ++i) {
+        if (i < 1 || i > 9) {
+            cs225::HSLAPixel &pix = mazeImage->getPixel(i, 0);
+            pix.l = 0;
+        }
+    }
+    for (unsigned int i = 0; i < mazeImage->height(); ++i) {
+        cs225::HSLAPixel &pix = mazeImage->getPixel(0, i);
+        pix.l = 0;
+    }
+
+    // check each cell and blacken correct walls
+    for (int x = 0; x < width_; ++x) {
+        for (int y = 0; y < height_; ++y) {
+            int cell = y * width_ + x;
+            // right wall
+            if (maze_[cell].rightWall) {
+                for (int i = 0; i <= 10; ++i) {
+                    cs225::HSLAPixel &pix = mazeImage->getPixel((x + 1) * 10, y * 10 + i);
+                    pix.l = 0; 
+                }
+            }
+            // down wall
+            if (maze_[cell].downWall) {
+                for (int i = 0; i <= 10; ++i) {
+                    cs225::HSLAPixel &pix = mazeImage->getPixel(x * 10 + i, (y + 1)* 10);
+                    pix.l = 0;
+                }
+            }
+        }
+    }
+
+    return mazeImage;
 }
 
 cs225::PNG* SquareMaze::drawMazeWithSolution() {
-    return nullptr;
+    // draw maze w/o sol
+    cs225::PNG* mazeImage = drawMaze();
+    //std::cout << "Dimensions: " << mazeImage->width() << "X" << mazeImage->height() << std::endl;
+
+    // get solution
+    std::vector<int> sol_vec = solveMaze();
+    //std::cout << "Before Path colouring" << std::endl;
+    // pix starting pt for sol path
+    int x = 5;
+    int y = 5;
+    //std::cout << " path length: " << sol_vec.size() << std::endl;
+    for (unsigned int i = 0; i < sol_vec.size(); ++i) {
+        // colour for sol path
+        cs225::HSLAPixel red = cs225::HSLAPixel(0, 1, 0.5, 1);
+        //std::cout << "x: " << x << " y: " << y << " dir: " << sol_vec[i] << " i: " << i <<std::endl;
+        // outline path
+        for (int j = 0; j < 10; ++j) {
+            if (sol_vec[i] == 0) {
+                x += 1;
+            } else if (sol_vec[i] == 1) {
+                y += 1;
+            } else if (sol_vec[i] == 2) {
+                x -= 1;
+            } else if (sol_vec[i] == 3) {
+                y -= 1;
+            }
+            cs225::HSLAPixel &pix = mazeImage->getPixel(x, y);
+            pix = red;
+        }
+    }
+    //std::cout << "Before whitening" << std::endl;
+    // calc exit pos
+    x = (sol_vec.back() == 0) ? (x / 10) - 1 : (x / 10);
+    y = (sol_vec.back() == 1) ? (y / 10) - 1 : (y / 10);
+
+    // whiten exit bottom wall
+    for (int i = 1; i < 10; ++i) {
+        cs225::HSLAPixel &pix = mazeImage->getPixel(x * 10 + i, (y + 1) * 10);
+        pix.l = 1;
+    }
+
+    return mazeImage;
 }
