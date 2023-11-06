@@ -9,7 +9,7 @@
 
 using namespace std;
 
-TEST_CASE("DH::testRemoveEASY", "[valgrind][weight=6]")
+TEST_CASE("DH::testRemoveEASY", "[valgrind][weight=6][dh]")
 {
 	TextFile infile("../data/textEasy.txt");
 	DHHashTable<string, int> hashTable(32);
@@ -31,7 +31,7 @@ TEST_CASE("DH::testRemoveEASY", "[valgrind][weight=6]")
 	REQUIRE(true);
 }
 
-TEST_CASE("DH::testRemoveHard", "[valgrind][weight=10]")
+TEST_CASE("DH::testRemoveHard", "[valgrind][weight=10][dh]")
 {
 	TextFile infile("../data/textHard.txt");
 	DHHashTable<string, int> hashTable(32);
@@ -61,7 +61,7 @@ TEST_CASE("DH::testRemoveHard", "[valgrind][weight=10]")
 	REQUIRE(true);
 }
 
-TEST_CASE("DH::testResizeOnce", "[valgrind][weight=7]")
+TEST_CASE("DH::testResizeOnce", "[valgrind][weight=7][dh]")
 {
 	TextFile infile("../data/textLong.txt");
 	DHHashTable<string, int> hashTable(16);
@@ -84,7 +84,7 @@ TEST_CASE("DH::testResizeOnce", "[valgrind][weight=7]")
 	REQUIRE(true);
 }
 
-TEST_CASE("DH::testResizeAll", "[valgrind][weight=11]")
+TEST_CASE("DH::testResizeAll", "[valgrind][weight=11][dh]")
 {
 	vector<string> strings;
 	for (int i = 'a'; i <= 'z'; i++)
@@ -113,7 +113,7 @@ TEST_CASE("DH::testResizeAll", "[valgrind][weight=11]")
 	REQUIRE(true);
 }
 
-TEST_CASE("DH::testInsertEasy", "[valgrind][weight=6]")
+TEST_CASE("DH::testInsertEasy", "[valgrind][weight=6][dh]")
 {
 	TextFile infile("../data/textEasy.txt");
 	DHHashTable<string, int> hashTable(32);
@@ -134,7 +134,7 @@ TEST_CASE("DH::testInsertEasy", "[valgrind][weight=6]")
 	REQUIRE(true);
 }
 
-TEST_CASE("DH::testInsertHard", "[valgrind][weight=10]")
+TEST_CASE("DH::testInsertHard", "[valgrind][weight=10][dh]")
 {
 	TextFile infile("../data/textHard.txt");
 	DHHashTable<string, int> hashTable(32);

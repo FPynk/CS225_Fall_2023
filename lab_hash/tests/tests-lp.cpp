@@ -9,7 +9,7 @@
 
 using namespace std;
 
-TEST_CASE("LP::testRemoveEASY", "[valgrind][weight=6]")
+TEST_CASE("LP::testRemoveEASY", "[valgrind][weight=6][lp]")
 {
 	TextFile infile("../data/textEasy.txt");
 	LPHashTable<string, int> hashTable(32);
@@ -32,7 +32,7 @@ TEST_CASE("LP::testRemoveEASY", "[valgrind][weight=6]")
 	REQUIRE(true);
 }
 
-TEST_CASE("LP::testRemoveHard", "[valgrind][weight=10]")
+TEST_CASE("LP::testRemoveHard", "[valgrind][weight=10][lp]")
 {
 	TextFile infile("../data/textHard.txt");
 	LPHashTable<string, int> hashTable(32);
@@ -62,7 +62,7 @@ TEST_CASE("LP::testRemoveHard", "[valgrind][weight=10]")
 	REQUIRE(true);
 }
 
-TEST_CASE("LP::testResizeOnce", "[valgrind][weight=7]")
+TEST_CASE("LP::testResizeOnce", "[valgrind][weight=7][lp]")
 {
 	TextFile infile("../data/textLong.txt");
 	LPHashTable<string, int> hashTable(16);
@@ -85,7 +85,7 @@ TEST_CASE("LP::testResizeOnce", "[valgrind][weight=7]")
 	REQUIRE(true);
 }
 
-TEST_CASE("LP::testResizeAll", "[valgrind][weight=11]")
+TEST_CASE("LP::testResizeAll", "[valgrind][weight=11][lp]")
 {
 	vector<string> strings;
 	for (int i = 'a'; i <= 'z'; i++)
@@ -114,7 +114,7 @@ TEST_CASE("LP::testResizeAll", "[valgrind][weight=11]")
 	REQUIRE(true);
 }
 
-TEST_CASE("LP::testInsertEasy", "[valgrind][weight=6]")
+TEST_CASE("LP::testInsertEasy", "[valgrind][weight=6][lp]")
 {
 	TextFile infile("../data/textEasy.txt");
 	LPHashTable<string, int> hashTable(32);
@@ -135,7 +135,7 @@ TEST_CASE("LP::testInsertEasy", "[valgrind][weight=6]")
 	REQUIRE(true);
 }
 
-TEST_CASE("LP::testInsertHard", "[valgrind][weight=10]")
+TEST_CASE("LP::testInsertHard", "[valgrind][weight=10][lp]")
 {
 	TextFile infile("../data/textHard.txt");
 	LPHashTable<string, int> hashTable(32);

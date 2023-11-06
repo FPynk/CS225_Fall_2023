@@ -2,7 +2,7 @@
  * @file schashtable.cpp
  * Implementation of the SCHashTable class.
  */
-
+#include <iostream>
 #include "schashtable.h"
  
 template <class K, class V>
@@ -49,34 +49,48 @@ SCHashTable<K, V>::SCHashTable(SCHashTable<K, V> const& other)
 template <class K, class V>
 void SCHashTable<K, V>::insert(K const& key, V const& value)
 {
+    // Ensure we have the correct 'size' variable that represents the current size of the table.
+    size_t idx = hashes::hash(key, size);  // Use the current size of the hash table.
 
-    /**
-     * @todo Implement this function.
-     *
-     */
+    // Create a pair and insert it into the table at the hashed index.
+    std::pair<K, V> p(key, value);
+    table[idx].push_front(p);
+
+    // Increment the count of elements in the table.
+    this->elems++;
+    // do we need to resize
+    if (shouldResize()) {
+        resizeTable();
+    }
 }
 
 template <class K, class V>
 void SCHashTable<K, V>::remove(K const& key)
 {
+    size_t idx = hashes::hash(key, size);
     typename std::list<std::pair<K, V>>::iterator it;
-    /**
-     * @todo Implement this function.
-     *
-     * Please read the note in the lab spec about list iterators and the
-     * erase() function on std::list!
-     */
-    (void) key; // prevent warnings... When you implement this function, remove this line.
+    for (it = table[idx].begin(); it != table[idx].end(); it++) {
+        if (it->first == key) {
+            table[idx].erase(it);
+            elems--;
+            return;
+        }
+    }
+    
 }
 
 template <class K, class V>
 V SCHashTable<K, V>::find(K const& key) const
 {
-
-    /**
-     * @todo: Implement this function.
-     */
-
+    if (size == 0) {  // Directly using 'size' is fine here too
+        throw std::out_of_range("Hash table is empty");
+    }
+    size_t idx = hashes::hash(key, size);
+    typename std::list<std::pair<K, V>>::iterator it;
+    for (it = table[idx].begin(); it != table[idx].end(); it++) {
+        if (it->first == key)
+            return it->second;
+    }
     return V();
 }
 
@@ -125,7 +139,30 @@ void SCHashTable<K, V>::clear()
 template <class K, class V>
 void SCHashTable<K, V>::resizeTable()
 {
+    // calculate new size using findPrime
+    size_t newSize = findPrime(size * 2);
+    std::cout << "size: " << size << " newSize: " << newSize << std::endl;
+
+    // create new table of new size
+    std::list<std::pair<K, V>> *newTable = new std::list<std::pair<K, V>>[newSize];
+
+    // Rehash elements
     typename std::list<std::pair<K, V>>::iterator it;
+    for (size_t i = 0; i < size; i++) {
+        for (it = table[i].begin(); it != table[i].end(); it++) {
+            size_t newIdx = hashes::hash(it->first, newSize);
+            newTable[newIdx].push_front(std::move(*it));
+        }
+    }
+
+    // Swapping 
+    std::list<std::pair<K, V>> *oldTable = table;
+    table = newTable;
+    size = newSize;
+
+    // Cleanup
+    delete[] oldTable;
+
     /**
      * @todo Implement this function.
      *

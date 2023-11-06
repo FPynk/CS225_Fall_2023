@@ -79,29 +79,87 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
      * **Do this check *after* increasing elems (but before inserting)!!**
      * Also, don't forget to mark the cell for probing with should_probe!
      */
+    
+    // Increment and resize if needed
+    elems++;
+    if (shouldResize()) {
+        resizeTable();
+    }
+    // get idx of where to start
+    size_t idx = hashes::hash(key, size);
+    // Check if slot is filled or not
+    if (table[idx] != nullptr) {
+        for (unsigned int i = 0; i < size; i++) {
+            // if key already exists, replace. If reach empty insert new ele
+            unsigned int newIdx = (idx + i) % size;
+            if (table[newIdx] != nullptr && table[newIdx]->first == key) {
+                table[newIdx]->second = value;
+                elems--;
+                return;
+            } else if (table[newIdx] == nullptr) {
+                table[newIdx] = new std::pair<K, V>(key, value);
+                should_probe[newIdx] = true;
+                return;
+            }
+        }
+    } else {
+        // insert new element
+        table[idx] = new std::pair<K, V>(key, value);
+        should_probe[idx] = true;
+    }
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
 }
 
 template <class K, class V>
 void LPHashTable<K, V>::remove(K const& key)
 {
-    /**
-     * @todo: implement this function
-     */
+    // get idx starting point for key
+    size_t idx = hashes::hash(key, size);
+
+    // Check table for the key
+    for (size_t i = 0; i < size; ++i) {
+        size_t curIdx = (idx + i) % size;
+
+        // If we hit a null, key is not in table
+        if (table[curIdx] == nullptr) {
+            return;
+        }
+
+        // Check if current slot contains key to remove
+        if (table[curIdx] != nullptr && table[curIdx]->first == key) {
+            // delete pair and set to nullptr
+            delete table[curIdx];
+            table[curIdx] = nullptr;
+
+            // Decrement elems
+            --elems;
+            return;
+        }
+    }
 }
 
 template <class K, class V>
 int LPHashTable<K, V>::findIndex(const K& key) const
 {
-    
     /**
      * @todo Implement this function
      *
      * Be careful in determining when the key is not in the table!
      */
-
+    // compute initial index for given key
+    size_t idx = hashes::hash(key, size);
+    // prove table to find key
+    for (size_t i =0; i < size; ++i) {
+        size_t curIdx = (idx + i) % size;
+        // if hit a nullptr, key not present
+        if (!should_probe[curIdx]) {
+            return -1;
+        }
+        // if not null and matching key
+        if (table[curIdx] != nullptr && table[curIdx]->first == key) {
+            return static_cast<int>(curIdx);
+        }
+    }
     return -1;
 }
 
@@ -151,12 +209,38 @@ void LPHashTable<K, V>::clear()
 template <class K, class V>
 void LPHashTable<K, V>::resizeTable()
 {
-
     /**
-     * @todo Implement this function
-     *
-     * The size of the table should be the closest prime to size * 2.
-     *
-     * @hint Use findPrime()!
-     */
+    * @todo Implement this function
+    *
+    * The size of the table should be the closest prime to size * 2.
+    *
+    * @hint Use findPrime()!
+    */
+    // calc new size
+    size_t newSize = findPrime(2 * size);
+    // allocate new aray of pointers
+    std::pair<K, V>** newTable = new std::pair<K, V>*[newSize]();
+    bool* newShouldProbe = new bool[newSize]();
+
+    // rehash all preexisting elements
+    for (size_t i =0; i < size; ++i) {
+    //skip emtpy elements
+        if (table[i] != nullptr) {
+            // get new idx of current key
+            size_t idx = hashes::hash(table[i]->first, newSize);
+            // find free slot in new table to insert
+            while (newTable[idx] != nullptr) {
+                idx = (idx + 1) % newSize;
+            }
+            // place new element
+            newTable[idx] = table[i];
+            newShouldProbe[idx] = true;
+        }
+    }
+    // delete old table
+    delete[] table;
+    delete[] should_probe;
+    table = newTable;
+    should_probe = newShouldProbe;
+    size = newSize;
 }
