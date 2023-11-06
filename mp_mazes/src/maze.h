@@ -162,6 +162,10 @@ class SquareMaze
      * @return a PNG of the solved SquareMaze
      */
     cs225::PNG* drawMazeWithSolution();
+    // returns next cell idx wrt dir
+    int nextCell(int x, int y, int dir) const;
+    // returns prev cell idx wrt dir to get to current cell
+    int prevCell(int x, int y, int dir) const;
 
     private:
     // 2D vector of cells to store cells of maze
