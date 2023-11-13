@@ -177,5 +177,4 @@ class SquareMaze
     // Keep track of important values
     int width_;
     int height_;
-
 };

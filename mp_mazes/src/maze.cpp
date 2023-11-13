@@ -2,6 +2,7 @@
 #include <ctime>
 #include <queue>
 #include <algorithm>
+#include <chrono>
 
 SquareMaze::SquareMaze() : width_(0), height_(0) {
     // empty constructor
@@ -17,7 +18,7 @@ void SquareMaze::makeMaze(int width, int height) {
     ds_.addelements(total_cells);
 
     // Seed random number gen with current time
-    std::srand(std::time(nullptr));
+    std::srand(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
     // Keep track of wall removed
     int removed_walls = 0;
 
@@ -262,10 +263,13 @@ cs225::PNG* SquareMaze::drawMazeWithSolution() {
     // pix starting pt for sol path
     int x = 5;
     int y = 5;
+    // colour for sol path
+    cs225::HSLAPixel red = cs225::HSLAPixel(0, 1, 0.5, 1);
+    // colour first pix
+    cs225::HSLAPixel &pix = mazeImage->getPixel(x, y);
+    pix = red;
     //std::cout << " path length: " << sol_vec.size() << std::endl;
     for (unsigned int i = 0; i < sol_vec.size(); ++i) {
-        // colour for sol path
-        cs225::HSLAPixel red = cs225::HSLAPixel(0, 1, 0.5, 1);
         //std::cout << "x: " << x << " y: " << y << " dir: " << sol_vec[i] << " i: " << i <<std::endl;
         // outline path
         for (int j = 0; j < 10; ++j) {
@@ -283,15 +287,16 @@ cs225::PNG* SquareMaze::drawMazeWithSolution() {
         }
     }
     //std::cout << "Before whitening" << std::endl;
-    // calc exit pos
-    x = (sol_vec.back() == 0) ? (x / 10) - 1 : (x / 10);
-    y = (sol_vec.back() == 1) ? (y / 10) - 1 : (y / 10);
+    // calc exit position based on the last direction
+    int exit_x = x / 10;
+    int exit_y = y / 10;
 
-    // whiten exit bottom wall
-    for (int i = 1; i < 10; ++i) {
-        cs225::HSLAPixel &pix = mazeImage->getPixel(x * 10 + i, (y + 1) * 10);
-        pix.l = 1;
+    // Whiten the exit bottom wall
+    for (int i = 1; i < 10; i++) {
+        cs225::HSLAPixel & pixel = mazeImage->getPixel(exit_x * 10 + i, (exit_y + 1) * 10);
+        pixel.l = 1;
     }
-
+    
     return mazeImage;
 }
+
