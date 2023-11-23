@@ -98,7 +98,7 @@ class BF
 * @return A value between 0 and 1 (inclusive) estimating the FPR for the BF under these conditions
 */
 float measureFPR(std::vector<int> inList, uint64_t size, std::vector<hashFunction> hashList, unsigned max);
-
+bool contains(std::vector<int> inList, unsigned int i);
 
 /**
 * A bitmask-based function to get a boolean value from a character
