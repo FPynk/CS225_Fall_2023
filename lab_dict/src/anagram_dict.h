@@ -54,6 +54,8 @@ class AnagramDict
      */
     std::vector<std::vector<std::string>> get_all_anagrams() const;
 
+    std::string get_anagram_key(const std::string& word) const;
+
   private:
     std::map<std::string, std::vector<std::string>> dict;
 };
