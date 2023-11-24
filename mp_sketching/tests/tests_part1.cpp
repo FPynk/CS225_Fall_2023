@@ -31,7 +31,7 @@ std::vector<uint64_t> file_to_minhash(std::string fname){
     return mh;
 }
 
-TEST_CASE("test_kminhash", "[weight=5]") {
+TEST_CASE("test_kminhash", "[weight=5][part=1]") {
     std::string dirpath = "../data/universe_100/raw/";
     std::vector<std::string> filenames;
     for (const auto & entry : std::filesystem::directory_iterator(dirpath)){
