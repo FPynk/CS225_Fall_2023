@@ -4,6 +4,7 @@
 #include <set>
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 std::vector<uint64_t> kminhash(std::vector<int> inList, unsigned k, hashFunction h) {
     std::set<uint64_t> hash_vals;
@@ -69,32 +70,6 @@ std::vector<uint64_t> kpartition_minhash(std::vector<int> inList, int part_bits,
     return output;
 }
 
-/**
- * Given two minhash sketches, return the estimate of the Jaccard similarity between the 
- * two sketches.
- * This should be calculated directly as seen in lecture:
- *
- * The intersection is the numeric count of the matches between mh1 and mh2 (the order 
- * doesnt matter)!
- *
- * The union is the numeric count of the total number of unique values found when combining 
- * mh1 and mh2.
- * That is to say if |mh1|=|mh2|=4 (k=4), and they intersect with 2 items, the union total 
- * is 6.
- *
- * NOTE: In the slides we calculated Jaccard multiple ways. This is the ONLY allowed way for 
- * the assignment.
- *
- * WARNING: You MUST ignore any instances of GLOBAL_MAX_INT when computing this similarity!
- * Remember, GLOBAL_MAX_INT implies that there *wasnt* enough unique hashing items to finish 
- * the sketch.
- * This is ok but shouldnt be counted as similarity, since GLOBAL_MAX_INT doesnt correspond to 
- * a real value.
- *  
- * @param mh1 The first minhash sketch being compared
- * @param mh2 The second minhash sketch being compared
- * @return A float between 0 and 1 (inclusive) storing the estimated similarity between sketches
- */
 float minhash_jaccard(std::vector<uint64_t> mh1, std::vector<uint64_t> mh2) {
     // J = intersection / union
     float intersection = 0.0;
@@ -124,7 +99,24 @@ float minhash_jaccard(std::vector<uint64_t> mh1, std::vector<uint64_t> mh2) {
 }
 
 int minhash_cardinality(std::vector<uint64_t> mh, unsigned k) {
-    return 0;
+    if (mh.empty() || k == 0 || k > mh.size()) {
+        return 0; // invalid input
+    }
+    // grab kth minhash
+    uint64_t kth_min_val = mh[k-1];
+    if (kth_min_val == GLOBAL_MAX_INT) {
+        return 0; // kth min hash shouldnt be place holder
+    }
+    // uint64_t max = *std::max_element(mh.begin(), mh.end());
+    // calc caridnality and round up
+    //std::cout << "k " << k << std::endl;
+    //std::cout << "kth_min_val " << kth_min_val << std::endl;
+    //std::cout << "max " << max << std::endl;
+    //std::cout << "UINT64_MAX " << UINT64_MAX << std::endl;
+    double normalised = (static_cast<double>(kth_min_val) / static_cast<double>(UINT64_MAX));
+    //std::cout << "normalised " << normalised << std::endl;
+    double card = std::ceil((k / normalised) - 1);
+    return static_cast<int>(card);
 }
 
 
