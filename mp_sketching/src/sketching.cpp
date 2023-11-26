@@ -119,13 +119,42 @@ int minhash_cardinality(std::vector<uint64_t> mh, unsigned k) {
     return static_cast<int>(card);
 }
 
+/**
+ * Given two raw datasets containing a vector of integers, compute the exact Jaccard similarity between datasets.
+ * Your similarity metric must ignore duplicates present in the dataset when computing the relevant cardinalities.
+ * In other words, treat your input as two sets and do a set comparison.
+ *  
+ * @param raw1 The first dataset being compared
+ * @param raw2 The second dataset being compared
+ * @return A float between 0 and 1 (inclusive) storing the actual similarity between datasets
+ */
 
 float exact_jaccard(std::vector<int> raw1, std::vector<int> raw2) {
-    return 0.0;
+    // fuck you DUPLICATESSSSSSSSSS
+    std::set<int> set1(raw1.begin(), raw1.end());
+    std::set<int> set2(raw2.begin(), raw2.end());
+    // setup for union and intersection
+    std::set<int> union_set;
+    std::vector<int> intersect;
+    
+    // intersection
+    // notes for future andrew
+    // set1 and set2 must be sorted, auto done for std::set
+    // last argument is the otput iterator to beginning of a range to store the results
+    // , in this case back_inserter returns insert iterator that uses push_back function of a container (vector)
+    std::set_intersection(set1.begin(), set1.end(), set2.begin(), set2.end(), std::back_inserter(intersect));
+
+    // union stuff
+    union_set.insert(set1.begin(), set1.end());
+    union_set.insert(set2.begin(), set2.end());
+
+    float result = union_set.empty() ? 0.0 : static_cast<float>(intersect.size())/ static_cast<float>(union_set.size());    
+    return result;
 }
 
 int exact_cardinality(std::vector<int> raw) {
-    return 0;
+    std::set<int> set(raw.begin(), raw.end());
+    return set.size();
 }
 
 MM::MM(const cs225::PNG& input, unsigned numTiles, unsigned k, hashFunction h) {
