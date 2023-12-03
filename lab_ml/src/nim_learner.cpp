@@ -26,6 +26,37 @@
  */
 NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
     /* Your code goes here! */
+    // iterate over the possible number of tokens
+    for (unsigned tokens = 0; tokens <= startingTokens; ++tokens) {
+        // create vertices for P1 and P2's turn
+        Vertex p1 = "p1-" + std::to_string(tokens);
+        Vertex p2 = "p2-" + std::to_string(tokens);
+        g_.insertVertex(p1);
+        g_.insertVertex(p2);
+
+        // if tokens 0, game ends
+        if (tokens == 0) continue;
+
+        // create edges for legal moves (1/2 tokens)
+        // check for move of 1 token
+        if (tokens >= 1) {
+            g_.insertEdge(p1, "p2-" + std::to_string(tokens - 1));
+            g_.insertEdge(p2, "p1-" + std::to_string(tokens - 1));
+            g_.setEdgeWeight(p1, "p2-" + std::to_string(tokens - 1), 0);
+            g_.setEdgeWeight(p2, "p1-" + std::to_string(tokens - 1), 0);
+        }
+
+        // check for move of 2 tokens
+        if (tokens >= 2) {
+            g_.insertEdge(p1, "p2-" + std::to_string(tokens - 2));
+            g_.insertEdge(p2, "p1-" + std::to_string(tokens - 2));
+            g_.setEdgeWeight(p1, "p2-" + std::to_string(tokens - 2), 0);
+            g_.setEdgeWeight(p2, "p1-" + std::to_string(tokens - 2), 0);
+        }
+    }
+
+    // set starting vertex
+    startingVertex_ = "p1-" + std::to_string(startingTokens);
 }
 
 /**
