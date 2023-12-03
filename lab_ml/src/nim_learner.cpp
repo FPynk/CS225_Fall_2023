@@ -114,30 +114,46 @@ std::vector<Edge> NimLearner::playRandomGame() const {
  */
 void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
     /* Your code goes here! */
-    if (path.empty()) return; 
 
-    // determine the winner
-    bool player1Wins = path.back().dest.substr(1, 2) == "2-0";
-    std::cout << "Game Winner: Player " << (player1Wins ? "1" : "2") << std::endl;
+    bool isPlayer1Winner = path.back().dest == "p2-0";;
 
-    for (const Edge & edge : path) {
-        // determine if P1 or P2 move
-        bool isPlayer1Move = edge.source.substr(1, 1) == "1";
-
-        int currentWeight = g_.getEdgeWeight(edge.source, edge.dest);
-
-        std::cout << "Edge from " << edge.source << " to " << edge.dest;
-        std::cout << " (Player " << (isPlayer1Move ? "1" : "2") << " move). Current weight: " << currentWeight;
-
-        // update the weight, +1 winner, -1 loser
-        if (isPlayer1Move == player1Wins) {
-            g_.setEdgeWeight(edge.source, edge.dest, currentWeight + 1);
-            std::cout << ". Updated weight: " << currentWeight + 1 << std::endl;
+    for (const Edge& edge : path) {
+        // Check if it's player 1's move
+        if (edge.source.substr(1, 1) == "1") {
+            // If player 1 is the winner, reward their moves; otherwise, punish
+            isPlayer1Winner ? g_.setEdgeWeight(edge.source, edge.dest, edge.getWeight() + 1)
+                            : g_.setEdgeWeight(edge.source, edge.dest, edge.getWeight() - 1);
         } else {
-            g_.setEdgeWeight(edge.source, edge.dest, currentWeight - 1);
-            std::cout << ". Updated weight: " << currentWeight - 1 << std::endl;
+            // If player 2 is the winner, reward their moves; otherwise, punish
+            isPlayer1Winner ? g_.setEdgeWeight(edge.source, edge.dest, edge.getWeight() - 1)
+                            : g_.setEdgeWeight(edge.source, edge.dest, edge.getWeight() + 1);
         }
     }
+
+    // if (path.empty()) return; 
+
+    // // determine the winner
+    // bool player1Wins = path.back().dest.substr(1, 2) == "2-0";
+    // //std::cout << "Game Winner: Player " << (player1Wins ? "1" : "2") << std::endl;
+
+    // for (const Edge & edge : path) {
+    //     // determine if P1 or P2 move
+    //     bool isPlayer1Move = edge.source.substr(1, 1) == "1";
+
+    //     int currentWeight = g_.getEdgeWeight(edge.source, edge.dest);
+
+    //     //std::cout << "Edge from " << edge.source << " to " << edge.dest;
+    //     //std::cout << " (Player " << (isPlayer1Move ? "1" : "2") << " move). Current weight: " << currentWeight;
+
+    //     // update the weight, +1 winner, -1 loser
+    //     if (isPlayer1Move == player1Wins) {
+    //         g_.setEdgeWeight(edge.source, edge.dest, currentWeight + 1);
+    //         //std::cout << ". Updated weight: " << currentWeight + 1 << std::endl;
+    //     } else {
+    //         g_.setEdgeWeight(edge.source, edge.dest, currentWeight - 1);
+    //         //std::cout << ". Updated weight: " << currentWeight - 1 << std::endl;
+    //     }
+    // }
 }
 
 /**

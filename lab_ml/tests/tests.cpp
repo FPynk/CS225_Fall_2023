@@ -102,7 +102,7 @@ TEST_CASE("A NimLearner(1) random path contains one edge", "[weight=1][part=3]")
   REQUIRE( path.size() == 1 );
 }
 
-TEST_CASE("NimLearner(1) updates the edge weight correctly", "[weight=1][part=3]") {
+TEST_CASE("NimLearner(1) updates the edge weight correctly", "[weight=1][part=3][yes]") {
   NimLearner nim(1);
   std::vector<Edge> path = nim.playRandomGame();
   REQUIRE(path.size() > 0);
