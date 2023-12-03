@@ -10,6 +10,7 @@
 
 #include "nim_graph/graph.h"
 #include "nim_graph/edge.h"
+#include "nim_graph/random.h"
 
 /**
  * Represents a algorithm to learn the game of Nim.
@@ -77,6 +78,7 @@ public:
   const Graph & getGraph() const;
 
 private:
+  mutable Random r_;
   Graph g_;
   Vertex startingVertex_;
 };
