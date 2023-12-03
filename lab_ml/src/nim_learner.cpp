@@ -69,11 +69,32 @@ NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
  * @returns A random path through the state space graph.
  */
 std::vector<Edge> NimLearner::playRandomGame() const {
-  vector<Edge> path;
- /* Your code goes here! */
+    std::vector<Edge> path;
+    Vertex currentVertex = startingVertex_; // initial state
+
+    while (true) {
+        // get adjacent vertices
+        std::vector<Vertex> adjacentVertices = g_.getAdjacent(currentVertex); 
+        if (adjacentVertices.empty()) {
+            break; // end the game if none left
+        }
+
+        // randomly select adjacent vertex (next state)
+        int randomIndex = rand() % adjacentVertices.size();
+        Vertex nextVertex = adjacentVertices[randomIndex];
+
+        // get the edge between the current and next vertex
+        Edge e = g_.getEdge(currentVertex, nextVertex);
+        if (e.source == Graph::InvalidVertex || e.dest == Graph::InvalidVertex) {
+            throw std::runtime_error("Invalid edge encountered in playRandomGame");
+        }
+        path.push_back(e); // add edge to the path
+
+        currentVertex = nextVertex; // update current vertex for next iteration
+    }
+
   return path;
 }
-
 /*
  * Updates the edge weights on the graph based on a path through the state
  * tree.
@@ -91,7 +112,25 @@ std::vector<Edge> NimLearner::playRandomGame() const {
  * @param path A path through the a game of Nim to learn.
  */
 void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
- /* Your code goes here! */
+    /* Your code goes here! */
+    if (path.empty()) return; // No action if the path is empty
+
+    // Determine the winner
+    bool player1Wins = path.back().dest.substr(1, 2) == "2-0";
+
+    for (const Edge & edge : path) {
+        // Determine if the move was made by Player 1 or Player 2
+        bool isPlayer1Move = edge.source.substr(1, 1) == "1";
+
+        int currentWeight = g_.getEdgeWeight(edge.source, edge.dest);
+
+        // Update the weight: Reward the winner's moves and penalize the loser's moves
+        if (isPlayer1Move == player1Wins) {
+            g_.setEdgeWeight(edge.source, edge.dest, currentWeight + 1);
+        } else {
+            g_.setEdgeWeight(edge.source, edge.dest, currentWeight - 1);
+        }
+    }
 }
 
 /**
