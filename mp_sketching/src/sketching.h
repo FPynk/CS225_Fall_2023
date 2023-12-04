@@ -207,8 +207,11 @@ class MM
 
 
     private:
-        // Your implementation here -- only the functions above will be tested
-
+    // Your implementation here -- only the functions above will be tested
+    std::vector<std::vector<std::vector<uint64_t>>> minHashes_;
+    unsigned int numTiles_;
+    unsigned int tile_width_;
+    unsigned int tile_height_;
 };
 
 /* *** Part 3: Creating a Graph from MinHash Lists overlap *** */

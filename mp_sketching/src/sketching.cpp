@@ -1,4 +1,6 @@
 #include "sketching.h"
+#include "../lib/cs225/BWPixel.h"
+#include "../lib/cs225/PNG.h"
 
 #include <vector>
 #include <set>
@@ -157,16 +159,62 @@ int exact_cardinality(std::vector<int> raw) {
     return set.size();
 }
 
-MM::MM(const cs225::PNG& input, unsigned numTiles, unsigned k, hashFunction h) {
+MM::MM(const cs225::PNG& input, unsigned numTiles, unsigned k, hashFunction h) : numTiles_(numTiles) {
+    // calcing tile dims
+    // rmmbr to account for when pix gets cut off
+    unsigned int tile_width = input.width() / numTiles;
+    unsigned int tile_height = input.height() / numTiles;
+    tile_width_ = tile_width;
+    tile_height_ = tile_height;
+    minHashes_ = std::vector<
+                    std::vector<
+                        std::vector<uint64_t>>>(numTiles,
+                                                std::vector<std::vector<uint64_t>>(numTiles));
+    // loop thru tiles
+    for (unsigned int i = 0; i < numTiles; ++i) {
+        for (unsigned int j = 0; j < numTiles; ++j) {
+            unsigned int start_x = j * tile_width;
+            unsigned int start_y = i * tile_height;
+            // account for uneven sized tiles
+            unsigned int end_x = std::min(start_x + tile_width, input.width());
+            unsigned int end_y = std::min(start_y + tile_height, input.height());
+            // min hash vec and input vec
+            std::vector<uint64_t> tile_min_hashes_vec;
+            std::vector<int> inList = std::vector<int>();
+            // fill up input vec
+            for (unsigned int y = start_y; y < end_y; ++y) {
+                for (unsigned int x = start_x; x < end_x; ++x) {
+                    const BWPixel & pix = input.getPixel(x, y);
+                    // get an int from the pix for hashing
+                    int pix_val = static_cast<int>(pix.l * 255);
+                    inList.push_back(pix_val);
+                }
+            }
+            // hash input vec and store
+            tile_min_hashes_vec = kminhash(inList, k, h);
+            minHashes_[i][j] = tile_min_hashes_vec;
+        }
+    }
 }
 
 
 std::vector<uint64_t> MM::getMinHash(unsigned width, unsigned height) const {
-    return std::vector<uint64_t>();
+    unsigned int x_tile = width / tile_width_;
+    unsigned int y_tile = height / tile_height_;
+    return minHashes_[y_tile][x_tile];
 }
 
 int MM::countMatchTiles(const MM & other, float threshold) const {
-    return 0;
+    int count = 0;
+    // assuming same tile dimensions for both
+    for (unsigned int i = 0; i < numTiles_; ++i) {
+        for (unsigned int j = 0; j < numTiles_; ++j) {
+            if (minhash_jaccard(minHashes_[i][j], other.getMinHash(j * numTiles_, i * numTiles_)) > threshold) {
+                count++;
+            }
+        }
+    }
+    return count;
 }
 
 std::vector<std::tuple<int, int, int>> build_minhash_graph(std::vector<std::string> flist, unsigned numTiles, unsigned k, hashFunction h, float threshold) {

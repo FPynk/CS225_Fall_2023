@@ -44,7 +44,7 @@ std::tuple<int, int, int> normalizeTuple(std::tuple<int, int, int> &in){
     return in;
 }
 
-TEST_CASE("test_png_minhash (uniform minhash)", "[weight=5]"){
+TEST_CASE("test_png_minhash (uniform minhash)", "[weight=5][part=2]"){
     std::vector<std::string> flist = {"../data/sixcolor_100_100/raw/0.png", "../data/sixcolor_100_100/raw/1.png", \
          "../data/sixcolor_100_100/raw/2.png", "../data/sixcolor_100_100/raw/3.png","../data/sixcolor_100_100/raw/4.png"};
 
@@ -60,7 +60,7 @@ TEST_CASE("test_png_minhash (uniform minhash)", "[weight=5]"){
     }
 }
 
-TEST_CASE("test_png_minhash (black-white simple tests)", "[weight=5]"){
+TEST_CASE("test_png_minhash (black-white simple tests)", "[weight=5][part=2][failing]"){
         std::vector<std::string> flist = {"../data/twocolor_10_10/raw/blacksquare.png","../data/twocolor_10_10/raw/whitesquare.png", \
         "../data/twocolor_10_10/raw/blacksquare2.png","../data/twocolor_10_10/raw/whitesquare2.png"};
 
@@ -80,7 +80,6 @@ TEST_CASE("test_png_minhash (black-white simple tests)", "[weight=5]"){
             for(unsigned row = 0; row < numTiles; row++){
                 for(unsigned col = 0; col < numTiles; col++){
                     unsigned tmp = col+row*numTiles;
-
                     REQUIRE(um.getMinHash(col,row) == emm[tmp]);       
                 }
             }
@@ -88,7 +87,7 @@ TEST_CASE("test_png_minhash (black-white simple tests)", "[weight=5]"){
         }
 }
 
-TEST_CASE("test_png_minhash (total random hash1 mixed sizes)", "[weight=5]"){
+TEST_CASE("test_png_minhash (total random hash1 mixed sizes)", "[weight=5][part=2]"){
     std::vector<std::string> flist = {"../data/r_500_500/raw/0.png", "../data/r_500_500/raw/1.png", \
         "../data/r_500_500/raw/2.png", "../data/r_500_500/raw/3.png","../data/r_500_500/raw/4.png"};
 
@@ -141,7 +140,7 @@ TEST_CASE("test_png_minhash (total random hash1 mixed sizes)", "[weight=5]"){
     */
 }
 
-TEST_CASE("test_png_minhash (total random rectangular PNGs)", "[weight=5]"){
+TEST_CASE("test_png_minhash (total random rectangular PNGs)", "[weight=5][part=2]"){
     std::vector<std::string> flist = {"../data/r_50_100/raw/0.png", "../data/r_50_100/raw/1.png"};
 
     for(auto f : flist){
@@ -194,7 +193,7 @@ TEST_CASE("test_png_minhash (total random rectangular PNGs)", "[weight=5]"){
     
 }
 
-TEST_CASE("test_png_matchingTiles (sixcolor_100_100)", "[weight=10]"){
+TEST_CASE("test_png_matchingTiles (sixcolor_100_100)", "[weight=10][part=2]"){
     std::string f0 = "../data/sixcolor_100_100/raw/0.png";
     std::string f1 = "../data/sixcolor_100_100/raw/1.png";
     std::string f2 = "../data/sixcolor_100_100/raw/2.png";
@@ -220,7 +219,7 @@ TEST_CASE("test_png_matchingTiles (sixcolor_100_100)", "[weight=10]"){
     REQUIRE(um3.countMatchTiles(um2, 0.9) == 42);
 }
 
-TEST_CASE("test_png_matchingTiles (r_500_500)", "[weight=10]"){
+TEST_CASE("test_png_matchingTiles (r_500_500)", "[weight=10][part=2]"){
     std::string f0 = "../data/r_500_500/raw/0.png";
     std::string f1 = "../data/r_500_500/raw/1.png";
     std::string f2 = "../data/r_500_500/raw/2.png";
@@ -249,7 +248,7 @@ TEST_CASE("test_png_matchingTiles (r_500_500)", "[weight=10]"){
     REQUIRE(alt2.countMatchTiles(alt1, 0.6) == 382);
 }
 
-TEST_CASE("test_build_minhash_graph (sixcolor_100_100)", "[weight=10]"){
+TEST_CASE("test_build_minhash_graph (sixcolor_100_100)", "[weight=10][part=2]"){
     std::vector<std::string> flist = {"../data/sixcolor_100_100/raw/0.png", "../data/sixcolor_100_100/raw/1.png", \
         "../data/sixcolor_100_100/raw/2.png", "../data/sixcolor_100_100/raw/3.png","../data/sixcolor_100_100/raw/4.png"};
 
@@ -299,7 +298,7 @@ TEST_CASE("test_build_minhash_graph (sixcolor_100_100)", "[weight=10]"){
     }
 }
 
-TEST_CASE("test_build_minhash_graph (r_500_500)", "[weight=10]"){
+TEST_CASE("test_build_minhash_graph (r_500_500)", "[weight=10][part=2]"){
     std::vector<std::string> flist = {"../data/r_500_500/raw/0.png", "../data/r_500_500/raw/1.png", \
          "../data/r_500_500/raw/2.png"};
 
