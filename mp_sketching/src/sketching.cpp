@@ -162,14 +162,12 @@ int exact_cardinality(std::vector<int> raw) {
 MM::MM(const cs225::PNG& input, unsigned numTiles, unsigned k, hashFunction h) : numTiles_(numTiles) {
     // calcing tile dims
     // rmmbr to account for when pix gets cut off
-    unsigned int tile_width = input.width() / numTiles;
-    unsigned int tile_height = input.height() / numTiles;
-    tile_width_ = tile_width;
-    tile_height_ = tile_height;
-    minHashes_ = std::vector<
-                    std::vector<
-                        std::vector<uint64_t>>>(numTiles,
-                                                std::vector<std::vector<uint64_t>>(numTiles));
+    std::cout << "PNG Dimensions: X*Y " << input.width() << "*" << input.height();
+    unsigned int tile_width = std::ceil(static_cast<double>(input.width()) / numTiles);
+    unsigned int tile_height = std::ceil(static_cast<double>(input.height()) / numTiles);
+    std::cout << " numTiles: " << numTiles << " | tile_width: " << tile_width << " tile_height " << tile_height << std::endl; 
+    minHashes_ = std::vector<std::vector<uint64_t>>(numTiles * numTiles);
+                
     // loop thru tiles
     for (unsigned int i = 0; i < numTiles; ++i) {
         for (unsigned int j = 0; j < numTiles; ++j) {
@@ -192,16 +190,16 @@ MM::MM(const cs225::PNG& input, unsigned numTiles, unsigned k, hashFunction h) :
             }
             // hash input vec and store
             tile_min_hashes_vec = kminhash(inList, k, h);
-            minHashes_[i][j] = tile_min_hashes_vec;
+            minHashes_[i*numTiles + j] = tile_min_hashes_vec;
         }
     }
 }
 
 
 std::vector<uint64_t> MM::getMinHash(unsigned width, unsigned height) const {
-    unsigned int x_tile = width / tile_width_;
-    unsigned int y_tile = height / tile_height_;
-    return minHashes_[y_tile][x_tile];
+    // unsigned int x_tile = width / tile_width_;
+    // unsigned int y_tile = height / tile_height_;
+    return minHashes_[height * numTiles_ + width];
 }
 
 int MM::countMatchTiles(const MM & other, float threshold) const {
@@ -209,7 +207,7 @@ int MM::countMatchTiles(const MM & other, float threshold) const {
     // assuming same tile dimensions for both
     for (unsigned int i = 0; i < numTiles_; ++i) {
         for (unsigned int j = 0; j < numTiles_; ++j) {
-            if (minhash_jaccard(minHashes_[i][j], other.getMinHash(j * numTiles_, i * numTiles_)) > threshold) {
+            if (minhash_jaccard(minHashes_[i*numTiles_ + j], other.getMinHash(j, i)) >= threshold) {
                 count++;
             }
         }
@@ -218,5 +216,26 @@ int MM::countMatchTiles(const MM & other, float threshold) const {
 }
 
 std::vector<std::tuple<int, int, int>> build_minhash_graph(std::vector<std::string> flist, unsigned numTiles, unsigned k, hashFunction h, float threshold) {
-    return std::vector<std::tuple<int, int, int>>();
+    std::vector<std::tuple<int, int, int>> edge_vec;
+    
+    // vec to store minhash per image
+    std::vector<MM> minHash_vec;
+
+    // convert image in flist to minhash then store
+    for (const std::string& filename: flist) {
+        cs225::PNG png;
+        png.readFromFile(filename);
+        MM mm(png, numTiles, k, h);
+        minHash_vec.push_back(mm);
+    }
+
+    // pairwise comparison, i think this works idk
+    for (size_t i = 0; i < minHash_vec.size(); ++i) {
+        for (size_t j = i + 1; j < minHash_vec.size(); ++j) {
+            int matching_tiles = minHash_vec[i].countMatchTiles(minHash_vec[j], threshold);
+            edge_vec.emplace_back(i, j, matching_tiles);
+        }
+    }
+
+    return edge_vec;
 }

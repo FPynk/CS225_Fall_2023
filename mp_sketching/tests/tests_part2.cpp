@@ -60,7 +60,7 @@ TEST_CASE("test_png_minhash (uniform minhash)", "[weight=5][part=2]"){
     }
 }
 
-TEST_CASE("test_png_minhash (black-white simple tests)", "[weight=5][part=2][failing]"){
+TEST_CASE("test_png_minhash (black-white simple tests)", "[weight=5][part=2]"){
         std::vector<std::string> flist = {"../data/twocolor_10_10/raw/blacksquare.png","../data/twocolor_10_10/raw/whitesquare.png", \
         "../data/twocolor_10_10/raw/blacksquare2.png","../data/twocolor_10_10/raw/whitesquare2.png"};
 
